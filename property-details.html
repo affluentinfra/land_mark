@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Details | Landmark Realtors Ludhiana</title>
+    
+    <!-- Fallback/Base SEO Meta Tags (Will be dynamically enriched/overwritten) -->
+    <meta name="description" content="View details of this luxury commercial space in Ludhiana. Showrooms, offices, and plots presented by Landmark Realtors.">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background: radial-gradient(circle at 50% 0%, #0d1222 0%, #07090e 60%); padding-top: 120px;">
+
+    <!-- =========================================================================
+       HEADER / NAVIGATION
+       ========================================================================= -->
+    <header id="main-header" class="scrolled">
+        <a href="index.html" class="logo" id="header-logo">
+            <img src="assets/images/logo-dark.png" alt="Landmark Realtors" class="logo-img">
+        </a>
+        <nav id="header-nav">
+            <ul>
+                <li><a href="index.html" id="nav-home">Home</a></li>
+                <li><a href="properties.html" id="nav-properties">Properties</a></li>
+                <li><a href="index.html#collab-section" id="nav-collab">List With Us</a></li>
+                <li><a href="admin.html" id="nav-admin">Admin Portal</a></li>
+            </ul>
+        </nav>
+        <div class="header-cta">
+            <a href="index.html#collab-section" class="btn-gold" id="btn-header-cta">Consult Agent</a>
+            <div class="mobile-toggle" id="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- =========================================================================
+       MAIN PROPERTY DETAILS CONTAINER
+       ========================================================================= -->
+    <main class="section-padding" style="padding-top: 2rem;" id="property-details-section">
+        
+        <!-- Breadcrumb / Back button -->
+        <div style="margin-bottom: 2rem;">
+            <a href="properties.html" style="color: var(--color-gold-premium); font-size: 0.9rem;" id="back-to-showcase">
+                <i class="fa-solid fa-arrow-left"></i> Back to Commercial Showcase
+            </a>
+        </div>
+
+        <div class="details-container">
+            
+            <!-- Left Column: Media & Specifications -->
+            <div class="details-main-content">
+                
+                <!-- Dynamic Title & Header -->
+                <div class="details-meta-header" id="details-header-wrap">
+                    <span class="property-badge" id="details-badge" style="position: static; margin-bottom: 1rem; display: inline-block;">Commercial</span>
+                    <h1 id="details-title">Loading Property Details...</h1>
+                    <div class="property-location" id="details-location" style="font-size: 1.1rem; margin-top: 0.5rem;">
+                        <i class="fa-solid fa-location-dot"></i> Loading location...
+                    </div>
+                    <div class="details-price" id="details-price">₹0.00</div>
+                </div>
+
+                <!-- Multi-image Carousel Slider -->
+                <div class="details-slider-wrapper">
+                    <div class="details-slider" id="details-slider-track">
+                        <!-- Loaded dynamically. Defaults to spinning loading icon -->
+                        <div class="details-slide" style="display: flex; align-items: center; justify-content: center; background: #111522;">
+                            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; color: var(--color-gold-premium);"></i>
+                        </div>
+                    </div>
+                    <button class="slider-btn prev" id="slider-prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="slider-btn next" id="slider-next-btn"><i class="fa-solid fa-chevron-right"></i></button>
+                    <div class="slider-indicator" id="slider-indicator-text">1 / 1</div>
+                </div>
+
+                <!-- Specs Tabs -->
+                <div class="details-info-tabs">
+                    <button class="tab-btn active" id="tab-overview">Overview</button>
+                    <button class="tab-btn" id="tab-specifications">Specifications</button>
+                </div>
+
+                <!-- Description Block -->
+                <div class="property-description" id="details-description">
+                    <p>Fetching detailed descriptions of the commercial real estate asset. This includes layout options, nearby landmarks, accessibility, and utility provisions.</p>
+                </div>
+
+                <!-- Dynamic Custom Specifications Grid -->
+                <h3 style="margin-bottom: 1.5rem; border-left: 2px solid var(--color-gold-premium); padding-left: 0.8rem; font-size: 1.8rem;" id="specs-heading">Key Features &amp; Specifications</h3>
+                <div class="details-specs-list" id="details-specs-grid">
+                    <!-- Loaded dynamically from the custom_fields JSONB column in Supabase -->
+                    <div class="glass-panel spec-detail-card" style="grid-column: 1 / -1; text-align: center;">
+                        <p style="margin: 0; font-size: 0.9rem;">No custom specifications specified for this listing.</p>
+                    </div>
+                </div>
+
+                <!-- Video Showcase Frame -->
+                <div id="video-showcase-container" style="display: none;">
+                    <h3 style="margin-bottom: 1.5rem; border-left: 2px solid var(--color-gold-premium); padding-left: 0.8rem; font-size: 1.8rem;">Property Video Walkthrough</h3>
+                    <div class="details-video-wrapper" id="details-video-frame">
+                        <!-- Loaded dynamically (Youtube Iframe or video player) -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Sidebar Lead Capture -->
+            <div class="contact-sidebar glass-panel" id="sidebar-inquiry-box">
+                <h3>Request Information</h3>
+                <p>Submit your inquiry below, and a Landmark real estate advisor will call you within 15 minutes.</p>
+
+                <!-- Representative Profile Card -->
+                <div class="agent-profile">
+                    <div class="agent-avatar"><i class="fa-solid fa-user-tie"></i></div>
+                    <div class="agent-info">
+                        <h4>Landmark Advisory</h4>
+                        <p>Senior Leasing &amp; Acquisitions Specialist</p>
+                    </div>
+                </div>
+
+                <!-- Inquiry Lead Form -->
+                <form id="inquiry-form">
+                    <div class="form-group">
+                        <label for="inquiry-name">Your Name</label>
+                        <input type="text" id="inquiry-name" class="form-control" placeholder="e.g., Alok Singh" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inquiry-phone">Phone Number</label>
+                        <input type="tel" id="inquiry-phone" class="form-control" placeholder="e.g., +91 98765-43210" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inquiry-email">Email Address</label>
+                        <input type="email" id="inquiry-email" class="form-control" placeholder="e.g., name@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="inquiry-message">Your Message</label>
+                        <textarea id="inquiry-message" class="form-control" required>Hello Landmark Realtors, I am interested in viewing this property and would like to request more details.</textarea>
+                    </div>
+                    <button type="submit" class="btn-gold" id="btn-inquiry-submit" style="width: 100%;">Submit Inquiry</button>
+                    <div id="inquiry-form-status" style="margin-top: 1rem; text-align: center; font-size: 0.9rem;"></div>
+                </form>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-column footer-logo-desc">
+                <div class="logo">
+                    <div class="logo-symbol">LR</div>
+                    <div class="logo-text">Landmark<span>Realtors</span></div>
+                </div>
+                <p>Ludhiana's premier advisory for mid-to-high luxury corporate leases, buying, and listing commercial assets. Powered by local expertise, trust, and premium tech-driven showcasing.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Explore Spaces</h4>
+                <ul>
+                    <li><a href="properties.html?type=buy">For Sale</a></li>
+                    <li><a href="properties.html?type=lease">For Lease</a></li>
+                    <li><a href="properties.html?category=ultra-luxury">Ultra Luxury Portfolio</a></li>
+                    <li><a href="properties.html?location=Ferozepur">Ferozepur Road Hubs</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html#featured-section">Featured Showcase</a></li>
+                    <li><a href="index.html#services-block">Services</a></li>
+                    <li><a href="index.html#collab-section">List With Us</a></li>
+                    <li><a href="admin.html">Admin Dashboard</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Instagram Feed</h4>
+                <p style="font-size: 0.85rem; margin-bottom: 1rem;">Keep up with our luxury property site visits and real estate insights.</p>
+                <a href="https://www.instagram.com/landmark_realt0rs/" target="_blank" class="btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.75rem;">
+                    <i class="fa-brands fa-instagram"></i> @landmark_realt0rs
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Landmark Realtors LLP. All rights reserved.</p>
+            <p>Designed with premium aesthetics &amp; SEO analytics.</p>
+        </div>
+    </footer>
+
+    <!-- =========================================================================
+       JAVASCRIPT SOURCES
+       ========================================================================= -->
+    <!-- Supabase JS Client library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="assets/js/supabase-config.js"></script>
+    <script src="assets/js/app.js"></script>
+
+</body>
+</html>

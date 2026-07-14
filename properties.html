@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commercial Properties | Landmark Realtors Ludhiana</title>
+<meta name="description" content="Browse luxury and premium commercial listings in Ludhiana — offices, showrooms, retail spaces for sale or lease. Search & filter prime locations.">
+<meta name="keywords" content="commercial property ludhiana, showrooms for rent ferozepur road, office lease sarabha nagar, buy commercial space ludhiana, landmark realtors">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="main-header" class="scrolled">
+    <a href="index.html" class="logo-link" id="header-logo">
+        <img src="assets/images/logo-dark.png" alt="Landmark Realtors" class="logo-img">
+    </a>
+    <nav id="header-nav">
+        <ul>
+            <li><a href="index.html" id="nav-home">Home</a></li>
+            <li><a href="properties.html" class="active" id="nav-properties">Properties</a></li>
+            <li><a href="index.html#collab-section" id="nav-collab">List With Us</a></li>
+            <li><a href="admin.html" id="nav-admin">Admin Portal</a></li>
+        </ul>
+    </nav>
+    <div class="header-cta">
+        <a href="index.html#collab-section" class="btn-gold" id="btn-header-cta">Consult Agent</a>
+        <div class="mobile-toggle" id="menu-toggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</header>
+
+<!-- PAGE HEADER -->
+<section style="padding:9rem 5% 3rem;">
+    <div class="reveal">
+        <span class="section-subtitle">Curated Collection</span>
+        <h1 style="font-size:clamp(2.5rem,5vw,4rem);font-weight:300;margin-bottom:0.8rem;">Commercial <span style="color:var(--color-gold-premium);font-style:italic;">Showcase</span></h1>
+        <p>Elite commercial storefronts, showroom hubs and premier executive offices across Ludhiana.</p>
+    </div>
+</section>
+
+<!-- FILTERS -->
+<section style="padding:0 5% 3rem;">
+    <div class="glass-panel filter-bar" id="filters-container">
+        <div class="form-group" style="margin-bottom:0;">
+            <label for="filter-search"><i class="fa-solid fa-magnifying-glass"></i> Keyword Search</label>
+            <input type="text" id="filter-search" class="form-control" placeholder="Search by name or location…">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+            <label for="filter-type"><i class="fa-solid fa-tag"></i> Property Type</label>
+            <select id="filter-type" class="form-control">
+                <option value="all">All Types</option>
+                <option value="buy">For Sale</option>
+                <option value="lease">For Lease</option>
+            </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+            <label for="filter-location"><i class="fa-solid fa-location-crosshairs"></i> Location</label>
+            <select id="filter-location" class="form-control">
+                <option value="all">All Locations</option>
+                <option value="Ferozepur Road">Ferozepur Road</option>
+                <option value="Sarabha Nagar">Sarabha Nagar</option>
+                <option value="Model Town">Model Town</option>
+                <option value="Pakhowal Road">Pakhowal Road</option>
+                <option value="BRS Nagar">BRS Nagar</option>
+                <option value="Link Road">Link Road</option>
+            </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+            <label for="filter-sort"><i class="fa-solid fa-arrow-down-short-wide"></i> Sort By</label>
+            <select id="filter-sort" class="form-control">
+                <option value="newest">Newest First</option>
+                <option value="price-asc">Price: Low → High</option>
+                <option value="price-desc">Price: High → Low</option>
+            </select>
+        </div>
+    </div>
+</section>
+
+<!-- PROPERTIES GRID -->
+<section class="section-padding" style="padding-top:0;" id="listings-grid-section">
+    <div id="results-count" style="margin-bottom:1.5rem;font-size:0.82rem;color:var(--text-muted);"></div>
+    <div class="properties-grid" id="properties-grid">
+        <div class="no-results" style="grid-column:1/-1">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <p>Loading premier real estate index…</p>
+        </div>
+    </div>
+    <div id="no-results-msg" style="display:none;text-align:center;padding:4rem 2rem;">
+        <i class="fa-solid fa-building-circle-xmark" style="font-size:3rem;color:var(--color-gold-muted);margin-bottom:1rem;display:block;"></i>
+        <h3 style="font-size:1.4rem;margin-bottom:0.5rem;">No listings found</h3>
+        <p>Try adjusting your filters or <a href="#" id="clear-filters" style="color:var(--color-gold-premium);">clear all filters</a>.</p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div>
+            <a href="index.html">
+                <img src="assets/images/logo-dark.png" alt="Landmark Realtors" class="footer-logo-img">
+            </a>
+            <p class="footer-desc">Ludhiana's premier advisory for mid-to-high luxury commercial assets — powered by local expertise and premium tech-driven showcasing.</p>
+            <a href="https://www.instagram.com/landmark_realt0rs/" target="_blank" class="footer-insta" style="margin-top:1.2rem;display:inline-flex;">
+                <i class="fa-brands fa-instagram"></i> @landmark_realt0rs
+            </a>
+        </div>
+        <div class="footer-column">
+            <h4>Explore Spaces</h4>
+            <ul>
+                <li><a href="properties.html?type=buy">For Sale</a></li>
+                <li><a href="properties.html?type=lease">For Lease</a></li>
+                <li><a href="properties.html?category=ultra-luxury">Ultra Luxury Portfolio</a></li>
+                <li><a href="properties.html?location=Ferozepur">Ferozepur Road Hubs</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="index.html#featured-section">Featured Showcase</a></li>
+                <li><a href="index.html#services-block">Our Services</a></li>
+                <li><a href="index.html#collab-section">List With Us</a></li>
+                <li><a href="admin.html">Admin Dashboard</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Contact</h4>
+            <ul>
+                <li><a href="tel:+916284046330">+91 62840 46330</a></li>
+                <li><a href="mailto:landmarkrealtors197@gmail.com">landmarkrealtors197@gmail.com</a></li>
+                <li><a href="https://www.instagram.com/landmark_realt0rs/" target="_blank">@landmark_realt0rs</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Landmark Realtors LLP. All rights reserved.</p>
+        <p>trust | transparency | result</p>
+    </div>
+</footer>
+
+<!-- Video Modal -->
+<div class="modal-overlay" id="video-modal">
+    <div class="modal-content">
+        <button class="modal-close" id="modal-close-btn" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="modal-video" id="modal-video-container"></div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="assets/js/supabase-config.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

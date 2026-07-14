@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landmark Realtors | Luxury Commercial Real Estate in Ludhiana</title>
+    <meta name="description"
+        content="Landmark Realtors – Ludhiana's premier advisory for mid-to-high luxury commercial spaces. Buy, sell & lease premium offices, showrooms and retail spaces.">
+    <meta name="keywords"
+        content="commercial real estate ludhiana, luxury office space ludhiana, showrooms for rent ferozepur road, landmark realtors, premium leasing ludhiana, commercial property ludhiana">
+    <meta name="author" content="Landmark Realtors LLP">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Landmark Realtors | Luxury Commercial Real Estate Ludhiana">
+    <meta property="og:description"
+        content="High-end commercial spaces, offices and showrooms in Ludhiana. Buy, sell or lease today.">
+    <meta property="og:image" content="assets/images/logo-dark.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Google Fonts preconnect -->
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Landmark Realtors – Luxury Commercial Real Estate in Ludhiana</title>
+    <meta name="description" content="Explore premium commercial real estate in Ludhiana with Landmark Realtors. Luxury office spaces, retail showrooms, and tailored solutions for high‑end clients." />
+    <meta name="keywords" content="luxury commercial real estate Ludhiana, premium office spaces, commercial property listings, Landmark Realtors" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Landmark Realtors – Luxury Commercial Real Estate in Ludhiana" />
+    <meta property="og:description" content="Explore premium commercial real estate in Ludhanda with Landmark Realtors. Luxury office spaces, retail showrooms, and tailored solutions for high‑end clients." />
+    <meta property="og:type" content="website" />
+    <!-- TODO: replace YOUR_PROJECT with your Vercel project name when deploying -->
+<meta property="og:url" content="https://YOUR_PROJECT.vercel.app/" />
+<meta property="og:image" content="https://YOUR_PROJECT.vercel.app/assets/images/og-image.jpg" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Landmark Realtors – Luxury Commercial Real Estate in Ludhiana" />
+    <meta name="twitter:description" content="Explore premium commercial real estate in Ludhanda with Landmark Realtors. Luxury office spaces, retail showrooms, and tailored solutions for high‑end clients." />
+    <meta name="twitter:image" content="https://example.com/assets/images/og-image.jpg" />
+    
+    <!-- Structured Data: Organization -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Landmark Realtors",
+        "url": "https://example.com/",
+        "logo": "https://example.com/assets/images/logo-dark.png",
+        "sameAs": [
+            "https://www.facebook.com/landmarkrealtors",
+            "https://www.twitter.com/landmarkrealtors",
+            "https://www.linkedin.com/company/landmarkrealtors"
+        ]
+    }
+    </script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════════════════ -->
+    <header id="main-header">
+        <a href="index.html" class="logo-link" id="header-logo">
+            <img src="assets/images/logo-dark.png" alt="Landmark Realtors" class="logo-img">
+        </a>
+        <nav id="header-nav">
+            <ul>
+                <li><a href="index.html" class="active" id="nav-home">Home</a></li>
+                <li><a href="properties.html" id="nav-properties">Properties</a></li>
+                <li><a href="#collab-section" id="nav-collab">List With Us</a></li>
+                <li><a href="admin.html" id="nav-admin">Admin Portal</a></li>
+            </ul>
+        </nav>
+        <div class="header-cta">
+            <a href="#collab-section" class="btn-gold" id="btn-header-cta">Consult Agent</a>
+            <div class="mobile-toggle" id="menu-toggle" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </div>
+            <button id="hard-refresh" class="btn-outline" style="margin-left:0.5rem;">Refresh</button>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════════
+     HERO — Three.js canvas fills this
+═══════════════════════════════════════════════════════════ -->
+    <div id="hero-canvas-container" aria-hidden="true"></div>
+
+    <section class="hero-section" id="hero-block">
+
+        <!-- Animated SVG City Skyline -->
+        <svg id="hero-skyline" class="hero-skyline-svg" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax meet"
+            xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+                <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#c5a880" stop-opacity="0.6" />
+                    <stop offset="100%" stop-color="#c5a880" stop-opacity="0" />
+                </linearGradient>
+            </defs>
+            <!-- Building outlines — drawn via GSAP strokeDashoffset -->
+            <!-- Far bg buildings -->
+            <path class="sky-path" d="M0,280 L0,220 L30,220 L30,280" fill="none" stroke="#c5a880" stroke-width="1"
+                opacity="0.3" />
+            <path class="sky-path" d="M40,280 L40,200 L55,200 L55,180 L70,180 L70,280" fill="none" stroke="#c5a880"
+                stroke-width="1" opacity="0.3" />
+            <path class="sky-path" d="M85,280 L85,230 L115,230 L115,280" fill="none" stroke="#c5a880" stroke-width="1"
+                opacity="0.3" />
+
+            <!-- Mid buildings -->
+            <path class="sky-path" d="M140,280 L140,160 L145,150 L150,160 L175,160 L175,280" fill="none"
+                stroke="#c5a880" stroke-width="1.5" opacity="0.55" />
+            <path class="sky-path" d="M200,280 L200,190 L230,190 L230,280" fill="none" stroke="#c5a880"
+                stroke-width="1.5" opacity="0.55" />
+            <path class="sky-path" d="M250,280 L250,140 L255,125 L260,140 L310,140 L310,280" fill="none"
+                stroke="#c5a880" stroke-width="2" opacity="0.65" />
+            <path class="sky-path" d="M330,280 L330,170 L370,170 L370,280" fill="none" stroke="#c5a880"
+                stroke-width="1.5" opacity="0.55" />
+
+            <!-- Foreground hero towers -->
+            <path class="sky-path" d="M440,280 L440,80 L444,60 L448,80 L500,80 L500,280" fill="none" stroke="#c5a880"
+                stroke-width="2.5" />
+            <path class="sky-path" d="M520,280 L520,110 L570,110 L570,280" fill="none" stroke="#c5a880"
+                stroke-width="2" />
+            <path class="sky-path" d="M600,280 L600,50 L604,30 L608,50 L680,50 L680,280" fill="none" stroke="#c5a880"
+                stroke-width="3" />
+            <path class="sky-path" d="M700,280 L700,100 L750,100 L750,280" fill="none" stroke="#c5a880"
+                stroke-width="2" />
+            <path class="sky-path" d="M780,280 L780,75 L784,55 L788,75 L840,75 L840,280" fill="none" stroke="#c5a880"
+                stroke-width="2.5" />
+            <path class="sky-path" d="M870,280 L870,130 L920,130 L920,280" fill="none" stroke="#c5a880"
+                stroke-width="2" />
+
+            <!-- Right bg -->
+            <path class="sky-path" d="M980,280 L980,160 L1030,160 L1030,280" fill="none" stroke="#c5a880"
+                stroke-width="1.5" opacity="0.55" />
+            <path class="sky-path" d="M1060,280 L1060,140 L1065,122 L1070,140 L1110,140 L1110,280" fill="none"
+                stroke="#c5a880" stroke-width="2" opacity="0.65" />
+            <path class="sky-path" d="M1130,280 L1130,190 L1170,190 L1170,280" fill="none" stroke="#c5a880"
+                stroke-width="1.5" opacity="0.55" />
+            <path class="sky-path" d="M1210,280 L1210,220 L1240,220 L1240,280" fill="none" stroke="#c5a880"
+                stroke-width="1" opacity="0.3" />
+            <path class="sky-path" d="M1280,280 L1280,200 L1320,200 L1320,280" fill="none" stroke="#c5a880"
+                stroke-width="1" opacity="0.3" />
+            <path class="sky-path" d="M1360,280 L1360,240 L1440,240 L1440,280" fill="none" stroke="#c5a880"
+                stroke-width="1" opacity="0.2" />
+
+            <!-- Ground line -->
+            <line class="sky-path" x1="0" y1="280" x2="1440" y2="280" stroke="#c5a880" stroke-width="1" opacity="0.4" />
+
+            <!-- Window lights (animated separately) -->
+            <rect class="sky-window" x="457" y="95" width="7" height="5" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="468" y="95" width="7" height="5" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="457" y="108" width="7" height="5" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="468" y="108" width="7" height="5" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="612" y="65" width="9" height="6" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="626" y="65" width="9" height="6" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="640" y="65" width="9" height="6" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="612" y="80" width="9" height="6" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="626" y="80" width="9" height="6" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="640" y="80" width="9" height="6" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="790" y="90" width="7" height="5" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="801" y="90" width="7" height="5" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="812" y="90" width="7" height="5" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="790" y="103" width="7" height="5" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="801" y="103" width="7" height="5" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="261" y="152" width="8" height="5" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="273" y="152" width="8" height="5" fill="#e8cc87" opacity="0" />
+            <rect class="sky-window" x="285" y="152" width="8" height="5" fill="#e8cc87" opacity="0" />
+            <!-- Ground gradient fill -->
+            <rect x="0" y="270" width="1440" height="50" fill="url(#skyGrad)" opacity="0.3" />
+        </svg>
+
+        <div class="hero-content">
+            <span class="hero-tagline">Premier Commercial Real Estate · Ludhiana</span>
+            <h1 class="hero-title">
+                Redefining<br>
+                <span class="gold">Commercial</span><br>
+                Spaces
+            </h1>
+            <p class="hero-desc">
+                Ludhiana's trusted advisory for mid‑to‑high luxury retail showrooms, premium corporate offices and
+                bespoke commercial spaces. Trust. Transparency. Result.
+            </p>
+            <div class="hero-actions">
+                <a href="properties.html" class="btn-gold" id="hero-btn-explore"><i class="fa-solid fa-building"></i>
+                    Explore Listings</a>
+                <a href="#collab-section" class="btn-outline" id="hero-btn-collab">Partner With Us</a>
+            </div>
+        </div>
+
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+     FEATURED LISTINGS CAROUSEL
+═══════════════════════════════════════════════════════════ -->
+    <section class="section-padding" id="featured-section" style="padding-top:10rem;">
+        <div class="section-header reveal">
+            <div class="section-title-wrap">
+                <span class="section-subtitle">Exquisite Listings</span>
+                <h2 class="section-title">Featured <span>Masterpieces</span></h2>
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-nav-btn" id="carousel-prev" aria-label="Previous">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button class="carousel-nav-btn" id="carousel-next" aria-label="Next">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="carousel-wrapper">
+            <div class="properties-carousel" id="featured-properties-container">
+                <div class="no-results" style="width:100%">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>Loading curated listings…</p>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:3rem;">
+            <a href="properties.html" class="btn-outline reveal">View All Properties <i
+                    class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+     SERVICES
+═══════════════════════════════════════════════════════════ -->
+    <section class="services-section section-padding" id="services-block">
+        <div class="section-header reveal" style="justify-content:center;text-align:center;margin-bottom:4rem;">
+            <div class="section-title-wrap" style="max-width:800px;margin:0 auto;">
+                <span class="section-subtitle">Core Offerings</span>
+                <h2 class="section-title">Elevating Real Estate <span>Services</span></h2>
+                <p style="margin-top:1rem;font-size:1rem;">Our boutique approach guarantees access to premium
+                    inventories, corporate tenant leasing and off‑market investment options.</p>
+            </div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card glass-panel">
+                <div class="service-icon"><i class="fa-solid fa-building-circle-check"></i></div>
+                <h3 class="service-title">Commercial Buying</h3>
+                <p class="service-desc">Identify and acquire prime real estate assets — from showroom bays on Ferozepur
+                    Road to boutique offices on Pakhowal Road. We secure high‑yield assets with strong appreciation
+                    potential.</p>
+                <a href="properties.html?type=buy" class="service-link">View purchase spaces <i
+                        class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="service-card glass-panel">
+                <div class="service-icon"><i class="fa-solid fa-coins"></i></div>
+                <h3 class="service-title">Premium Divestments</h3>
+                <p class="service-desc">Leverage our HNI network and target‑driven marketing to sell luxury retail
+                    storefronts, warehouses or land parcels at top values with qualified buyers.</p>
+                <a href="#collab-section" class="service-link">Inquire selling <i
+                        class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="service-card glass-panel">
+                <div class="service-icon"><i class="fa-solid fa-key"></i></div>
+                <h3 class="service-title">Corporate Leasing</h3>
+                <p class="service-desc">End‑to‑end leasing advisory for national brands and premium office requirements.
+                    We structure smooth leases with multi‑national anchors, banks and major corporate divisions.</p>
+                <a href="properties.html?type=lease" class="service-link">Browse leasing options <i
+                        class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+     WHY CHOOSE US — MARQUEE STRIP
+═══════════════════════════════════════════════════════════ -->
+    <div
+        style="overflow:hidden;border-top:1px solid rgba(197,168,128,0.1);border-bottom:1px solid rgba(197,168,128,0.1);padding:1.1rem 0;background:rgba(197,168,128,0.03);">
+        <div id="marquee-strip"
+            style="display:flex;gap:4rem;animation:marquee 28s linear infinite;white-space:nowrap;width:max-content;">
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Trust</span>
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Transparency</span>
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Result</span>
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Ludhiana's #1 Commercial Agency</span>
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Luxury · Premium · Mid-Luxury</span>
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Ferozepur Road · Sarabha Nagar · Model Town</span>
+            <!-- Duplicate for seamless loop -->
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Trust</span>
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Transparency</span>
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Result</span>
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Ludhiana's #1 Commercial Agency</span>
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Luxury · Premium · Mid-Luxury</span>
+            <span
+                style="font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--color-gold-muted);">✦
+                Ferozepur Road · Sarabha Nagar · Model Town</span>
+        </div>
+    </div>
+    <style>
+        @keyframes marquee {
+            from {
+                transform: translateX(0)
+            }
+
+            to {
+                transform: translateX(-50%)
+            }
+        }
+    </style>
+
+    <!-- ═══════════════════════════════════════════════════════════
+     COLLAB / CONTACT
+═══════════════════════════════════════════════════════════ -->
+    <section class="collab-section section-padding" id="collab-section">
+        <div class="collab-container">
+            <div class="reveal-left">
+                <span class="section-subtitle">Collaborative Ventures</span>
+                <h2 style="font-size:clamp(2rem,3.5vw,3rem);margin-bottom:1.4rem;">Partner with<br><span
+                        style="color:var(--color-gold-premium)">Landmark Realtors</span></h2>
+                <p style="margin-bottom:2rem;font-size:0.95rem;line-height:1.8;">Are you a developer, landlord or
+                    looking to rent or purchase a premium commercial asset in Ludhiana? Reach out to list your property
+                    or schedule a confidential advisory meeting.</p>
+                <ul class="contact-info-list">
+                    <li>
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>3rd Floor, Landmark Corporate Centre,<br>Ferozepur Road, Ludhiana, Punjab – 141001</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-phone"></i>
+                        <span>+91 62840 46330</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>landmarkrealtors197@gmail.com</span>
+                    </li>
+                </ul>
+                <div class="collab-socials">
+                    <a href="https://www.instagram.com/landmark_realt0rs/" target="_blank" class="social-btn"
+                        aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://wa.me/916284046330" target="_blank" class="social-btn" aria-label="WhatsApp"><i
+                            class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="glass-panel luxury-form reveal-right" id="collab-form-container">
+                <h3 style="font-size:1.3rem;margin-bottom:1.5rem;">Send an Inquiry</h3>
+                <form id="collab-form">
+                    <div class="form-group">
+                        <label for="collab-name">Full Name</label>
+                        <input type="text" id="collab-name" class="form-control" placeholder="Abhishek Sharma" required>
+                    </div>
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="collab-phone">Phone</label>
+                            <input type="tel" id="collab-phone" class="form-control" placeholder="+91 98765 43210"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="collab-email">Email</label>
+                            <input type="email" id="collab-email" class="form-control" placeholder="you@email.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="collab-type">Inquiry Type</label>
+                        <select id="collab-type" class="form-control">
+                            <option value="collab">List / Collaborate with Landmark</option>
+                            <option value="general">General Consultation</option>
+                            <option value="property">Interested in Buying</option>
+                            <option value="lease">Looking to Lease</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="collab-message">Message</label>
+                        <textarea id="collab-message" class="form-control"
+                            placeholder="Describe your property or requirements…" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-gold" id="btn-collab-submit"
+                        style="width:100%;justify-content:center;">
+                        <i class="fa-solid fa-paper-plane"></i> Send Inquiry
+                    </button>
+                    <div id="collab-form-status" style="margin-top:1rem;text-align:center;font-size:0.85rem;"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <a href="index.html">
+                    <img src="assets/images/logo-dark.png" alt="Landmark Realtors" class="footer-logo-img">
+                </a>
+                <p class="footer-desc">Ludhiana's premier advisory for mid‑to‑high luxury corporate leases, buying and
+                    listing commercial assets. Powered by local expertise and premium tech-driven showcasing.</p>
+                <a href="https://www.instagram.com/landmark_realt0rs/" target="_blank" class="footer-insta"
+                    style="margin-top:1.2rem;display:inline-flex;">
+                    <i class="fa-brands fa-instagram"></i> @landmark_realt0rs
+                </a>
+            </div>
+            <div class="footer-column">
+                <h4>Explore Spaces</h4>
+                <ul>
+                    <li><a href="properties.html?type=buy">For Sale</a></li>
+                    <li><a href="properties.html?type=lease">For Lease</a></li>
+                    <li><a href="properties.html?category=ultra-luxury">Ultra Luxury Portfolio</a></li>
+                    <li><a href="properties.html?location=Ferozepur">Ferozepur Road Hubs</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#featured-section">Featured Showcase</a></li>
+                    <li><a href="#services-block">Services</a></li>
+                    <li><a href="#collab-section">List With Us</a></li>
+                    <li><a href="admin.html">Admin Dashboard</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Ludhiana Locations</h4>
+                <ul>
+                    <li><a href="properties.html?location=Ferozepur Road">Ferozepur Road</a></li>
+                    <li><a href="properties.html?location=Sarabha Nagar">Sarabha Nagar</a></li>
+                    <li><a href="properties.html?location=Model Town">Model Town</a></li>
+                    <li><a href="properties.html?location=Pakhowal Road">Pakhowal Road</a></li>
+                    <li><a href="properties.html?location=BRS Nagar">BRS Nagar</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Landmark Realtors LLP. All rights reserved.</p>
+            <p>Ludhiana's Commercial Real Estate Authority · trust | transparency | result</p>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════════════ -->
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <!-- GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- App -->
+    <script src="assets/js/supabase-config.js"></script>
+    <script src="assets/js/three-hero.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>
