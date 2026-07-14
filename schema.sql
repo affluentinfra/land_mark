@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS public.properties (
     images TEXT[] NOT NULL, -- Array of image URLs
     video_url TEXT, -- YouTube or raw MP4 video URL
     custom_fields JSONB DEFAULT '{}'::jsonb, -- Custom key-value pairs (e.g., Carpet Area: "2500 Sq.Ft")
-    created_at TIMESTAMPTZ DEFAULT now()
+    created_at TIMESTAMPTZ DEFAULT now(),
+    owner_id UUID REFERENCES public.users(id)
 );
 
 -- Index for faster filtering and sorting
@@ -101,3 +102,108 @@ ON public.inquiries
 FOR DELETE 
 TO authenticated 
 USING (true);
+
+-- ====================================================
+-- EXTENSION: USER LISTING LIMIT, BLOGS, AND RLS POLICIES
+-- ====================================================
+
+-- Add listing_limit to users (default 10)
+ALTER TABLE public.users ADD COLUMN listing_limit INT NOT NULL DEFAULT 10;
+
+-- Create blogs table
+CREATE TABLE IF NOT EXISTS public.blogs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    link TEXT,
+    image_url TEXT,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    created_by UUID REFERENCES public.users(id) NOT NULL
+);
+
+-- RLS for properties – owners only
+CREATE POLICY "owner can manage own properties"
+ON public.properties
+FOR ALL
+TO authenticated
+USING (auth.uid() = owner_id);
+
+-- Admin full access (already covered by existing admin policies, but ensure)
+CREATE POLICY "admin full property access"
+ON public.properties
+FOR ALL
+TO authenticated
+USING (auth.role() = 'admin');
+
+-- Enforce per‑user listing limit via trigger
+CREATE OR REPLACE FUNCTION enforce_listing_limit()
+RETURNS trigger AS $$
+DECLARE current_count INT;
+BEGIN
+    SELECT COUNT(*) INTO current_count FROM public.properties WHERE owner_id = NEW.owner_id;
+    IF current_count >= (SELECT listing_limit FROM public.users WHERE id = NEW.owner_id) THEN
+        RAISE EXCEPTION 'User has reached their listing limit';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER trg_enforce_listing_limit
+BEFORE INSERT ON public.properties
+FOR EACH ROW EXECUTE FUNCTION enforce_listing_limit();
+
+-- Blogs – public read, admin write
+CREATE POLICY "public read blogs"
+ON public.blogs
+FOR SELECT
+USING (true);
+
+CREATE POLICY "admin write blogs"
+ON public.blogs
+FOR ALL
+TO authenticated
+USING (auth.role() = 'admin');
+
+-- =========================================================================
+-- USERS TABLE
+-- Stores application users and roles
+-- =========================================================================
+CREATE TABLE IF NOT EXISTS public.users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT NOT NULL UNIQUE,
+    role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('admin','user')),
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Enable Row Level Security for users
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+
+-- Policies for users table
+-- 1. Allow anyone to sign up (insert) with email
+CREATE POLICY "Allow public insert into users"
+ON public.users
+FOR INSERT
+TO anon, authenticated
+WITH CHECK (true);
+
+-- 2. Allow admin to select all users
+CREATE POLICY "Allow admin select users"
+ON public.users
+FOR SELECT
+TO authenticated
+USING (auth.role() = 'admin');
+
+-- 3. Allow admin to update any user
+CREATE POLICY "Allow admin update users"
+ON public.users
+FOR UPDATE
+TO authenticated
+USING (auth.role() = 'admin')
+WITH CHECK (true);
+
+-- 4. Allow admin to delete any user
+CREATE POLICY "Allow admin delete users"
+ON public.users
+FOR DELETE
+TO authenticated
+USING (auth.role() = 'admin');

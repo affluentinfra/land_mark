@@ -78,7 +78,12 @@
                 <li><a href="properties.html" id="nav-properties">Properties</a></li>
                 <li><a href="#collab-section" id="nav-collab">List With Us</a></li>
                 <li><a href="admin.html" id="nav-admin">Admin Portal</a></li>
-            </ul>
+                <li id="auth-link"><a href="login.html" id="nav-login">Login / Sign Up</a></li>
+                <li id="user-info" class="hidden">
+                    <span id="user-email"></span>
+                    <button id="logout-btn" class="btn-outline" style="margin-left:0.5rem;">Logout</button>
+                </li>
+                </ul>
         </nav>
         <div class="header-cta">
             <a href="#collab-section" class="btn-gold" id="btn-header-cta">Consult Agent</a>
@@ -469,6 +474,7 @@
     <!-- App -->
     <script src="assets/js/supabase-config.js"></script>
     <script src="assets/js/three-hero.js"></script>
+    <script src="assets/js/auth-ui.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
 

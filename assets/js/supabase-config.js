@@ -31,6 +31,7 @@ async function initSupabase() {
     try {
         if (typeof supabase !== 'undefined') {
             supabaseClient = supabase.createClient(url, key);
+            window.supabase = supabaseClient;
             return supabaseClient;
         } else {
             console.error("Supabase CDN library not loaded. Make sure to include the Supabase JS script tag.");
