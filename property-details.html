@@ -3,206 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Property Details | Landmark Realtors Ludhiana</title>
-    
-    <!-- Fallback/Base SEO Meta Tags (Will be dynamically enriched/overwritten) -->
-    <meta name="description" content="View details of this luxury commercial space in Ludhiana. Showrooms, offices, and plots presented by Landmark Realtors.">
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>{{ property.title }} | Landmark Realtors Ludhiana</title>
+    <meta name="description" content="{{ property.description[:160] }}">
+    <meta property="og:title" content="{{ property.title }} | Landmark Realtors">
+    <meta property="og:description" content="{{ property.description[:200] }}">
+    {% if property.images %}
+    <meta property="og:image" content="{{ property.images[0] }}">
+    {% endif %}
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* ─── Details page specific ─────────────────── */
+        .details-hero {
+            position: relative; width: 100%; height: 480px; overflow: hidden;
+            background: #070a12;
+        }
+        .details-hero img {
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.85;
+            transition: opacity 0.4s;
+        }
+        .details-hero-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, transparent 30%, rgba(7,9,14,0.95) 100%);
+        }
+        .details-slider-wrap {
+            position: relative; width: 100%; height: 480px; overflow: hidden;
+        }
+        .details-slider-track {
+            display: flex; height: 100%; transition: transform 0.45s cubic-bezier(.4,0,.2,1);
+        }
+        .details-slide {
+            min-width: 100%; height: 100%; object-fit: cover; flex-shrink: 0;
+        }
+        .details-slide img { width:100%; height:100%; object-fit:cover; }
+        .slider-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(0,0,0,0.5); border: 1px solid var(--border-glass);
+            color: var(--color-gold-premium); width: 44px; height: 44px;
+            border-radius: 50%; cursor: pointer; font-size: 1rem; z-index: 5;
+            display: flex; align-items: center; justify-content: center;
+            transition: var(--transition-fast);
+        }
+        .slider-btn:hover { background: rgba(197,168,128,0.2); }
+        .slider-btn.prev { left: 1.2rem; }
+        .slider-btn.next { right: 1.2rem; }
+        .slider-counter {
+            position: absolute; bottom: 1rem; right: 1.2rem;
+            background: rgba(0,0,0,0.6); color: var(--text-secondary);
+            font-size: 0.75rem; padding: 0.3rem 0.7rem; border-radius: 20px;
+            border: 1px solid var(--border-glass);
+        }
+        /* Layout */
+        .details-layout {
+            display: grid; grid-template-columns: 1fr 360px; gap: 2.5rem;
+            max-width: 1300px; margin: 0 auto; padding: 3rem 5%;
+        }
+        @media (max-width: 900px) { .details-layout { grid-template-columns: 1fr; } }
+        .details-price {
+            font-size: 2.2rem; font-weight: 200; color: var(--color-gold-premium);
+            font-family: var(--font-heading); margin: 0.8rem 0;
+        }
+        .details-specs-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 2rem 0;
+        }
+        .spec-card {
+            background: var(--bg-dark-card); border: 1px solid var(--border-glass);
+            border-radius: 6px; padding: 1rem;
+        }
+        .spec-card .spec-label { font-size: 0.68rem; color: var(--color-gold-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+        .spec-card .spec-val { font-size: 0.95rem; color: var(--text-primary); font-weight: 500; margin-top: 0.3rem; }
+        /* Sidebar */
+        .inquiry-sidebar {
+            position: sticky; top: 100px; align-self: start;
+        }
+        .agent-profile {
+            display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+            padding: 1rem; background: rgba(197,168,128,0.05); border: 1px solid var(--border-glass); border-radius: 6px;
+        }
+        .agent-avatar {
+            width: 48px; height: 48px; border-radius: 50%; background: rgba(197,168,128,0.1);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--color-gold-premium); font-size: 1.4rem;
+        }
+        .agent-info h4 { font-size: 0.9rem; color: var(--text-primary); }
+        .agent-info p { font-size: 0.75rem; color: var(--text-muted); }
+        .thumb-strip { display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap; }
+        .thumb {
+            width: 64px; height: 48px; object-fit: cover; border-radius: 3px;
+            border: 2px solid transparent; cursor: pointer; transition: var(--transition-fast);
+        }
+        .thumb.active, .thumb:hover { border-color: var(--color-gold-premium); }
+    </style>
 </head>
-<body style="background: radial-gradient(circle at 50% 0%, #0d1222 0%, #07090e 60%); padding-top: 120px;">
+<body style="padding-top:80px;">
 
-    <!-- =========================================================================
-       HEADER / NAVIGATION
-       ========================================================================= -->
-    <header id="main-header" class="scrolled">
-        <a href="index.html" class="logo" id="header-logo">
-            <img src="assets/images/logo-dark.png" alt="Landmark Realtors" class="logo-img">
-        </a>
-        <nav id="header-nav">
-            <ul>
-                <li><a href="index.html" id="nav-home">Home</a></li>
-                <li><a href="properties.html" id="nav-properties">Properties</a></li>
-                <li><a href="index.html#collab-section" id="nav-collab">List With Us</a></li>
-                <li><a href="admin.html" id="nav-admin">Admin Portal</a></li>
-            </ul>
-        </nav>
-        <div class="header-cta">
-            <a href="index.html#collab-section" class="btn-gold" id="btn-header-cta">Consult Agent</a>
-            <div class="mobile-toggle" id="menu-toggle">
-                <i class="fa-solid fa-bars"></i>
-            </div>
+<!-- HEADER -->
+<header id="main-header" class="scrolled">
+    <a href="/" class="logo-link" id="header-logo">
+        <img src="/assets/images/logo-dark.png" alt="Landmark Realtors" class="logo-img">
+    </a>
+    <nav id="header-nav">
+        <ul>
+            <li><a href="/" id="nav-home">Home</a></li>
+            <li><a href="/properties" class="active" id="nav-properties">Properties</a></li>
+            <li><a href="/#collab-section" id="nav-collab">List With Us</a></li>
+            <li><a href="/admin" id="nav-admin">Admin Portal</a></li>
+            {% if session.get('user') %}
+            <li class="nav-user-item">
+                <span><i class="fa-solid fa-user-circle"></i> {{ session['user']['email'] }}</span>
+                <a href="/logout" class="btn-logout">Logout</a>
+            </li>
+            {% else %}
+            <li><a href="/login" id="nav-login">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <div class="header-cta">
+        <a href="/#collab-section" class="btn-gold" id="btn-header-cta">Consult Agent</a>
+        <div class="mobile-toggle" id="menu-toggle" aria-label="Menu">
+            <span></span><span></span><span></span>
         </div>
-    </header>
+    </div>
+</header>
 
-    <!-- =========================================================================
-       MAIN PROPERTY DETAILS CONTAINER
-       ========================================================================= -->
-    <main class="section-padding" style="padding-top: 2rem;" id="property-details-section">
-        
-        <!-- Breadcrumb / Back button -->
-        <div style="margin-bottom: 2rem;">
-            <a href="properties.html" style="color: var(--color-gold-premium); font-size: 0.9rem;" id="back-to-showcase">
-                <i class="fa-solid fa-arrow-left"></i> Back to Commercial Showcase
+<!-- IMAGE SLIDER -->
+{% set images = property.images if property.images else ['https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=900'] %}
+<div class="details-slider-wrap" id="details-slider-wrap">
+    <div class="details-slider-track" id="slider-track">
+        {% for img in images %}
+        <div class="details-slide">
+            <img src="{{ img }}" alt="{{ property.title }} — image {{ loop.index }}"
+                 onerror="this.src='https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=900'">
+        </div>
+        {% endfor %}
+    </div>
+    {% if images|length > 1 %}
+    <button class="slider-btn prev" id="slider-prev" onclick="slideGo(-1)" aria-label="Previous">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <button class="slider-btn next" id="slider-next" onclick="slideGo(1)" aria-label="Next">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+    <div class="slider-counter" id="slider-counter">1 / {{ images|length }}</div>
+    {% endif %}
+    <!-- Gradient overlay -->
+    <div class="details-hero-overlay"></div>
+</div>
+
+<!-- MAIN CONTENT LAYOUT -->
+<div class="details-layout">
+
+    <!-- LEFT: Details -->
+    <div>
+        <!-- Breadcrumb -->
+        <div style="margin-bottom:1.5rem;">
+            <a href="/properties" style="color:var(--color-gold-premium);font-size:0.88rem;">
+                <i class="fa-solid fa-arrow-left"></i> Back to All Properties
             </a>
         </div>
 
-        <div class="details-container">
-            
-            <!-- Left Column: Media & Specifications -->
-            <div class="details-main-content">
-                
-                <!-- Dynamic Title & Header -->
-                <div class="details-meta-header" id="details-header-wrap">
-                    <span class="property-badge" id="details-badge" style="position: static; margin-bottom: 1rem; display: inline-block;">Commercial</span>
-                    <h1 id="details-title">Loading Property Details...</h1>
-                    <div class="property-location" id="details-location" style="font-size: 1.1rem; margin-top: 0.5rem;">
-                        <i class="fa-solid fa-location-dot"></i> Loading location...
-                    </div>
-                    <div class="details-price" id="details-price">₹0.00</div>
-                </div>
+        <!-- Title block -->
+        <span class="prop-badge {{ property.type }}" style="position:static;display:inline-block;margin-bottom:0.8rem;">
+            {{ 'For Sale' if property.type == 'buy' else 'For Lease' }}
+        </span>
+        <h1 style="font-size:clamp(1.8rem,3vw,2.8rem);font-weight:300;line-height:1.2;margin-bottom:0.5rem;">
+            {{ property.title }}
+        </h1>
+        <div class="prop-location" style="font-size:1rem;margin-bottom:0.5rem;">
+            <i class="fa-solid fa-location-dot"></i> {{ property.location }}
+        </div>
+        <div class="details-price">{{ property.price_display }}</div>
 
-                <!-- Multi-image Carousel Slider -->
-                <div class="details-slider-wrapper">
-                    <div class="details-slider" id="details-slider-track">
-                        <!-- Loaded dynamically. Defaults to spinning loading icon -->
-                        <div class="details-slide" style="display: flex; align-items: center; justify-content: center; background: #111522;">
-                            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; color: var(--color-gold-premium);"></i>
-                        </div>
-                    </div>
-                    <button class="slider-btn prev" id="slider-prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button class="slider-btn next" id="slider-next-btn"><i class="fa-solid fa-chevron-right"></i></button>
-                    <div class="slider-indicator" id="slider-indicator-text">1 / 1</div>
-                </div>
+        <!-- Thumbnail strip (if multiple images) -->
+        {% if images|length > 1 %}
+        <div class="thumb-strip" id="thumb-strip">
+            {% for img in images %}
+            <img src="{{ img }}" class="thumb {{ 'active' if loop.first }}" alt="Thumbnail {{ loop.index }}"
+                 onclick="slideJump({{ loop.index0 }})"
+                 onerror="this.style.display='none'">
+            {% endfor %}
+        </div>
+        {% endif %}
 
-                <!-- Specs Tabs -->
-                <div class="details-info-tabs">
-                    <button class="tab-btn active" id="tab-overview">Overview</button>
-                    <button class="tab-btn" id="tab-specifications">Specifications</button>
-                </div>
-
-                <!-- Description Block -->
-                <div class="property-description" id="details-description">
-                    <p>Fetching detailed descriptions of the commercial real estate asset. This includes layout options, nearby landmarks, accessibility, and utility provisions.</p>
-                </div>
-
-                <!-- Dynamic Custom Specifications Grid -->
-                <h3 style="margin-bottom: 1.5rem; border-left: 2px solid var(--color-gold-premium); padding-left: 0.8rem; font-size: 1.8rem;" id="specs-heading">Key Features &amp; Specifications</h3>
-                <div class="details-specs-list" id="details-specs-grid">
-                    <!-- Loaded dynamically from the custom_fields JSONB column in Supabase -->
-                    <div class="glass-panel spec-detail-card" style="grid-column: 1 / -1; text-align: center;">
-                        <p style="margin: 0; font-size: 0.9rem;">No custom specifications specified for this listing.</p>
-                    </div>
-                </div>
-
-                <!-- Video Showcase Frame -->
-                <div id="video-showcase-container" style="display: none;">
-                    <h3 style="margin-bottom: 1.5rem; border-left: 2px solid var(--color-gold-premium); padding-left: 0.8rem; font-size: 1.8rem;">Property Video Walkthrough</h3>
-                    <div class="details-video-wrapper" id="details-video-frame">
-                        <!-- Loaded dynamically (Youtube Iframe or video player) -->
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Right Column: Sidebar Lead Capture -->
-            <div class="contact-sidebar glass-panel" id="sidebar-inquiry-box">
-                <h3>Request Information</h3>
-                <p>Submit your inquiry below, and a Landmark real estate advisor will call you within 15 minutes.</p>
-
-                <!-- Representative Profile Card -->
-                <div class="agent-profile">
-                    <div class="agent-avatar"><i class="fa-solid fa-user-tie"></i></div>
-                    <div class="agent-info">
-                        <h4>Landmark Advisory</h4>
-                        <p>Senior Leasing &amp; Acquisitions Specialist</p>
-                    </div>
-                </div>
-
-                <!-- Inquiry Lead Form -->
-                <form id="inquiry-form">
-                    <div class="form-group">
-                        <label for="inquiry-name">Your Name</label>
-                        <input type="text" id="inquiry-name" class="form-control" placeholder="e.g., Alok Singh" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="inquiry-phone">Phone Number</label>
-                        <input type="tel" id="inquiry-phone" class="form-control" placeholder="e.g., +91 98765-43210" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="inquiry-email">Email Address</label>
-                        <input type="email" id="inquiry-email" class="form-control" placeholder="e.g., name@gmail.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="inquiry-message">Your Message</label>
-                        <textarea id="inquiry-message" class="form-control" required>Hello Landmark Realtors, I am interested in viewing this property and would like to request more details.</textarea>
-                    </div>
-                    <button type="submit" class="btn-gold" id="btn-inquiry-submit" style="width: 100%;">Submit Inquiry</button>
-                    <div id="inquiry-form-status" style="margin-top: 1rem; text-align: center; font-size: 0.9rem;"></div>
-                </form>
-            </div>
-
+        <!-- Description -->
+        <div style="margin:2rem 0 1rem;">
+            <h2 style="font-size:1.2rem;color:var(--color-gold-premium);border-left:3px solid var(--color-gold-premium);padding-left:0.8rem;margin-bottom:1rem;">
+                Property Overview
+            </h2>
+            <p style="line-height:1.9;color:var(--text-secondary);font-size:0.95rem;">{{ property.description }}</p>
         </div>
 
-    </main>
+        <!-- Specifications grid -->
+        {% set custom = property.custom_fields or {} %}
+        {% if custom %}
+        <h2 style="font-size:1.2rem;color:var(--color-gold-premium);border-left:3px solid var(--color-gold-premium);padding-left:0.8rem;margin-bottom:1.2rem;">
+            Key Features &amp; Specifications
+        </h2>
+        <div class="details-specs-grid">
+            {% for k, v in custom.items() %}
+            <div class="spec-card glass-panel">
+                <div class="spec-label">{{ k }}</div>
+                <div class="spec-val">{{ v }}</div>
+            </div>
+            {% endfor %}
+            <div class="spec-card glass-panel">
+                <div class="spec-label">Category</div>
+                <div class="spec-val">{{ property.category|replace('-',' ')|title }}</div>
+            </div>
+            <div class="spec-card glass-panel">
+                <div class="spec-label">Transaction</div>
+                <div class="spec-val">{{ 'For Sale' if property.type == 'buy' else 'For Lease' }}</div>
+            </div>
+        </div>
+        {% endif %}
 
-    <!-- =========================================================================
-       FOOTER
-       ========================================================================= -->
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-column footer-logo-desc">
-                <div class="logo">
-                    <div class="logo-symbol">LR</div>
-                    <div class="logo-text">Landmark<span>Realtors</span></div>
+        <!-- Video -->
+        {% if property.video_url %}
+        <div style="margin-top:2rem;">
+            <h2 style="font-size:1.2rem;color:var(--color-gold-premium);border-left:3px solid var(--color-gold-premium);padding-left:0.8rem;margin-bottom:1.2rem;">
+                Property Video Walkthrough
+            </h2>
+            {% set vid = property.video_url %}
+            {% if 'youtube.com' in vid or 'youtu.be' in vid %}
+            {% set yt_id = vid.split('v=')[-1].split('&')[0] if 'v=' in vid else vid.split('/')[-1] %}
+            <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;">
+                <iframe src="https://www.youtube-nocookie.com/embed/{{ yt_id }}?rel=0"
+                    style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+            {% else %}
+            <video src="{{ vid }}" controls style="width:100%;border-radius:8px;"></video>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- CTA strip -->
+        <div style="display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;">
+            <a href="https://wa.me/916284046330?text=Hi, I'm interested in: {{ property.title|urlencode }}"
+               target="_blank" class="btn-gold">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp Enquiry
+            </a>
+            <a href="tel:+916284046330" class="btn-outline">
+                <i class="fa-solid fa-phone"></i> Call Now
+            </a>
+            <a href="/properties" class="btn-outline">
+                <i class="fa-solid fa-arrow-left"></i> All Listings
+            </a>
+        </div>
+    </div>
+
+    <!-- RIGHT: Sidebar inquiry form -->
+    <div class="inquiry-sidebar">
+        <div class="glass-panel" style="padding:1.5rem;">
+            <h3 style="font-size:1.1rem;margin-bottom:1rem;">Request Information</h3>
+            <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1.2rem;">
+                Submit your inquiry and a Landmark advisor will contact you within 15 minutes.
+            </p>
+            <div class="agent-profile">
+                <div class="agent-avatar"><i class="fa-solid fa-user-tie"></i></div>
+                <div class="agent-info">
+                    <h4>Landmark Advisory</h4>
+                    <p>Senior Leasing &amp; Acquisitions Specialist</p>
                 </div>
-                <p>Ludhiana's premier advisory for mid-to-high luxury corporate leases, buying, and listing commercial assets. Powered by local expertise, trust, and premium tech-driven showcasing.</p>
             </div>
-            <div class="footer-column">
-                <h4>Explore Spaces</h4>
-                <ul>
-                    <li><a href="properties.html?type=buy">For Sale</a></li>
-                    <li><a href="properties.html?type=lease">For Lease</a></li>
-                    <li><a href="properties.html?category=ultra-luxury">Ultra Luxury Portfolio</a></li>
-                    <li><a href="properties.html?location=Ferozepur">Ferozepur Road Hubs</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="index.html#featured-section">Featured Showcase</a></li>
-                    <li><a href="index.html#services-block">Services</a></li>
-                    <li><a href="index.html#collab-section">List With Us</a></li>
-                    <li><a href="admin.html">Admin Dashboard</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Instagram Feed</h4>
-                <p style="font-size: 0.85rem; margin-bottom: 1rem;">Keep up with our luxury property site visits and real estate insights.</p>
-                <a href="https://www.instagram.com/landmark_realt0rs/" target="_blank" class="btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.75rem;">
-                    <i class="fa-brands fa-instagram"></i> @landmark_realt0rs
-                </a>
-            </div>
+            <form id="inquiry-form">
+                <input type="hidden" name="property_id" value="{{ property.id }}">
+                <div class="form-group">
+                    <label for="inquiry-name">Your Name</label>
+                    <input type="text" id="inquiry-name" name="name" class="form-control" placeholder="Alok Singh" required>
+                </div>
+                <div class="form-group">
+                    <label for="inquiry-phone">Phone Number</label>
+                    <input type="tel" id="inquiry-phone" name="phone" class="form-control" placeholder="+91 98765 43210" required>
+                </div>
+                <div class="form-group">
+                    <label for="inquiry-email">Email Address</label>
+                    <input type="email" id="inquiry-email" name="email" class="form-control" placeholder="name@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label for="inquiry-message">Message</label>
+                    <textarea id="inquiry-message" name="message" class="form-control" required>Hi, I am interested in "{{ property.title }}" and would like more details.</textarea>
+                </div>
+                <input type="hidden" name="type" value="property">
+                <button type="submit" class="btn-gold" id="btn-inquiry-submit" style="width:100%;justify-content:center;">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Inquiry
+                </button>
+                <div id="inquiry-form-status" style="margin-top:1rem;text-align:center;font-size:0.85rem;"></div>
+            </form>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Landmark Realtors LLP. All rights reserved.</p>
-            <p>Designed with premium aesthetics &amp; SEO analytics.</p>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div>
+            <a href="/"><img src="/assets/images/logo-dark.png" alt="Landmark Realtors" class="footer-logo-img"></a>
+            <p class="footer-desc">Ludhiana's premier advisory for mid-to-high luxury commercial assets.</p>
+            <a href="https://www.instagram.com/landmark_realt0rs/" target="_blank" class="footer-insta" style="margin-top:1.2rem;display:inline-flex;">
+                <i class="fa-brands fa-instagram"></i> @landmark_realt0rs
+            </a>
         </div>
-    </footer>
+        <div class="footer-column">
+            <h4>Explore Spaces</h4>
+            <ul>
+                <li><a href="/properties?type=buy">For Sale</a></li>
+                <li><a href="/properties?type=lease">For Lease</a></li>
+                <li><a href="/properties?category=ultra-luxury">Ultra Luxury Portfolio</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="/#featured-section">Featured Showcase</a></li>
+                <li><a href="/#collab-section">List With Us</a></li>
+                <li><a href="/admin">Admin Dashboard</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Contact</h4>
+            <ul>
+                <li><a href="tel:+916284046330">+91 62840 46330</a></li>
+                <li><a href="mailto:landmarkrealtors197@gmail.com">landmarkrealtors197@gmail.com</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Landmark Realtors LLP. All rights reserved.</p>
+        <p>trust | transparency | result</p>
+    </div>
+</footer>
 
-    <!-- =========================================================================
-       JAVASCRIPT SOURCES
-       ========================================================================= -->
-    <!-- Supabase JS Client library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Custom Scripts -->
-    <script src="assets/js/supabase-config.js"></script>
-    <script src="assets/js/app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+// ── Image Slider ──────────────────────────────────────────────────────────────
+let slideIdx = 0;
+const total = {{ images|length }};
+const track = document.getElementById('slider-track');
+const counter = document.getElementById('slider-counter');
+const thumbs = document.querySelectorAll('.thumb');
 
+function updateSlider() {
+    if (track) track.style.transform = `translateX(-${slideIdx * 100}%)`;
+    if (counter) counter.textContent = `${slideIdx + 1} / ${total}`;
+    thumbs.forEach((t, i) => t.classList.toggle('active', i === slideIdx));
+}
+function slideGo(dir) {
+    slideIdx = (slideIdx + dir + total) % total;
+    updateSlider();
+}
+function slideJump(i) {
+    slideIdx = i;
+    updateSlider();
+}
+
+// Auto-advance
+if (total > 1) setInterval(() => slideGo(1), 5000);
+
+// ── Inquiry Form — async POST ─────────────────────────────────────────────────
+document.getElementById('inquiry-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn-inquiry-submit');
+    const status = document.getElementById('inquiry-form-status');
+    const orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending…';
+    status.textContent = '';
+    try {
+        const resp = await fetch('/inquiry', { method: 'POST', body: new FormData(this) });
+        const data = await resp.json();
+        if (data.success) {
+            status.style.color = '#4ade80';
+            status.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + data.message;
+            this.reset();
+        } else {
+            status.style.color = '#f87171';
+            status.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + (data.error || 'Failed to submit.');
+        }
+    } catch {
+        status.style.color = '#f87171';
+        status.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Connection error. Please try again.';
+    }
+    btn.disabled = false;
+    btn.innerHTML = orig;
+});
+</script>
 </body>
 </html>

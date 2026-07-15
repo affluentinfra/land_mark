@@ -3,36 +3,52 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up – Landmark Realtors</title>
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <link rel="stylesheet" href="assets/css/auth.css" />
-    <!-- Supabase JS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Create Account – Landmark Realtors</title>
+    <meta name="description" content="Register a new account with Landmark Realtors." />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="/assets/css/auth.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
     <section class="auth-section">
         <div class="auth-card">
-            <h2>Create Your Account</h2>
-            <form id="signup-form">
+            <a href="/" class="logo-link" style="display:block;text-align:center;margin-bottom:1.5rem;">
+                <img src="/assets/images/logo-dark.png" alt="Landmark Realtors" style="height:48px;object-fit:contain;">
+            </a>
+            <h2>Create Account</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for cat, msg in messages %}
+                  <div class="auth-message" style="color: {{ '#4ade80' if cat == 'success' else '#f87171' }}; margin-bottom:1rem;">
+                    <i class="fa-solid {{ 'fa-circle-check' if cat == 'success' else 'fa-circle-xmark' }}"></i> {{ msg }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form id="signup-form" method="POST" action="/signup">
                 <div class="form-group">
-                    <label for="signup-email">Email</label>
-                    <input type="email" id="signup-email" required />
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="you@email.com" required autocomplete="email" />
                 </div>
                 <div class="form-group">
-                    <label for="signup-password">Password</label>
-                    <input type="password" id="signup-password" required minlength="6" />
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="At least 6 characters" required minlength="6" autocomplete="new-password" />
                 </div>
-                <button type="submit" class="btn-gold">Sign Up</button>
+                <button type="submit" class="btn-gold" id="btn-signup-submit" style="width:100%;justify-content:center;margin-top:1rem;">
+                    <i class="fa-solid fa-user-plus"></i> Create Account
+                </button>
             </form>
+
             <p class="auth-switch">
                 Already have an account?
-                <a href="login.html" class="link">Sign In</a>
+                <a href="/login" class="link">Sign In</a>
             </p>
-            <p id="signup-message" class="auth-message"></p>
+            <p class="auth-switch" style="margin-top:0.5rem;">
+                <a href="/" class="link" style="color:var(--text-muted);">← Back to Home</a>
+            </p>
         </div>
     </section>
-    <script src="assets/js/supabase-config.js"></script>
-    <script src="assets/js/auth.js"></script>
-    <script src="assets/js/auth-ui.js"></script>
 </body>
 </html>

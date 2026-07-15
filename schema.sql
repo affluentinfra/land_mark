@@ -5,7 +5,53 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- =========================================================================
--- PROPERTIES TABLE
+-- 1. USERS TABLE
+-- Stores application users and roles
+-- =========================================================================
+CREATE TABLE IF NOT EXISTS public.users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT NOT NULL UNIQUE,
+    role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('admin','user')),
+    listing_limit INT NOT NULL DEFAULT 10,
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Enable Row Level Security for users
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+
+-- Policies for users table
+-- Allow anyone to sign up (insert) with email
+CREATE POLICY "Allow public insert into users"
+ON public.users
+FOR INSERT
+TO anon, authenticated
+WITH CHECK (true);
+
+-- Allow admin to select all users
+CREATE POLICY "Allow admin select users"
+ON public.users
+FOR SELECT
+TO authenticated
+USING (auth.role() = 'admin');
+
+-- Allow admin to update any user
+CREATE POLICY "Allow admin update users"
+ON public.users
+FOR UPDATE
+TO authenticated
+USING (auth.role() = 'admin')
+WITH CHECK (true);
+
+-- Allow admin to delete any user
+CREATE POLICY "Allow admin delete users"
+ON public.users
+FOR DELETE
+TO authenticated
+USING (auth.role() = 'admin');
+
+
+-- =========================================================================
+-- 2. PROPERTIES TABLE
 -- Stores commercial real estate listings
 -- =========================================================================
 CREATE TABLE IF NOT EXISTS public.properties (
@@ -21,7 +67,7 @@ CREATE TABLE IF NOT EXISTS public.properties (
     video_url TEXT, -- YouTube or raw MP4 video URL
     custom_fields JSONB DEFAULT '{}'::jsonb, -- Custom key-value pairs (e.g., Carpet Area: "2500 Sq.Ft")
     created_at TIMESTAMPTZ DEFAULT now(),
-    owner_id UUID REFERENCES public.users(id)
+    owner_id UUID REFERENCES public.users(id) ON DELETE CASCADE
 );
 
 -- Index for faster filtering and sorting
@@ -33,36 +79,50 @@ CREATE INDEX IF NOT EXISTS idx_properties_created_at ON public.properties(create
 ALTER TABLE public.properties ENABLE ROW LEVEL SECURITY;
 
 -- Policies for properties table
--- 1. Allow anyone (including anonymous public users) to select properties
+-- Allow anyone (including anonymous public users) to select properties
 CREATE POLICY "Allow public read access on properties" 
 ON public.properties 
 FOR SELECT 
 USING (true);
 
--- 2. Allow authenticated admin users to insert properties
+-- Allow authenticated admin users to insert properties
 CREATE POLICY "Allow authenticated admin insert properties" 
 ON public.properties 
 FOR INSERT 
 TO authenticated 
 WITH CHECK (true);
 
--- 3. Allow authenticated admin users to update properties
+-- Allow authenticated admin users to update properties
 CREATE POLICY "Allow authenticated admin update properties" 
 ON public.properties 
 FOR UPDATE 
 TO authenticated 
 USING (true);
 
--- 4. Allow authenticated admin users to delete properties
+-- Allow authenticated admin users to delete properties
 CREATE POLICY "Allow authenticated admin delete properties" 
 ON public.properties 
 FOR DELETE 
 TO authenticated 
 USING (true);
 
+-- Owners can manage their own listings
+CREATE POLICY "owner can manage own properties"
+ON public.properties
+FOR ALL
+TO authenticated
+USING (auth.uid() = owner_id);
+
+-- Admin has full listing access
+CREATE POLICY "admin full property access"
+ON public.properties
+FOR ALL
+TO authenticated
+USING (auth.role() = 'admin');
+
 
 -- =========================================================================
--- INQUIRIES TABLE
+-- 3. INQUIRIES TABLE
 -- Stores customer queries for "List With Us" / Collab / Property Inquiries
 -- =========================================================================
 CREATE TABLE IF NOT EXISTS public.inquiries (
@@ -83,34 +143,31 @@ CREATE INDEX IF NOT EXISTS idx_inquiries_created_at ON public.inquiries(created_
 ALTER TABLE public.inquiries ENABLE ROW LEVEL SECURITY;
 
 -- Policies for inquiries table
--- 1. Allow anyone to submit an inquiry
+-- Allow anyone to submit an inquiry
 CREATE POLICY "Allow public insert on inquiries" 
 ON public.inquiries 
 FOR INSERT 
 WITH CHECK (true);
 
--- 2. Allow only authenticated admin users to select/view inquiries
+-- Allow only authenticated admin users to select/view inquiries
 CREATE POLICY "Allow authenticated admin select inquiries" 
 ON public.inquiries 
 FOR SELECT 
 TO authenticated 
 USING (true);
 
--- 3. Allow authenticated admin users to delete inquiries
+-- Allow authenticated admin users to delete inquiries
 CREATE POLICY "Allow authenticated admin delete inquiries" 
 ON public.inquiries 
 FOR DELETE 
 TO authenticated 
 USING (true);
 
--- ====================================================
--- EXTENSION: USER LISTING LIMIT, BLOGS, AND RLS POLICIES
--- ====================================================
 
--- Add listing_limit to users (default 10)
-ALTER TABLE public.users ADD COLUMN listing_limit INT NOT NULL DEFAULT 10;
-
--- Create blogs table
+-- =========================================================================
+-- 4. BLOGS TABLE
+-- Stores real estate blogs
+-- =========================================================================
 CREATE TABLE IF NOT EXISTS public.blogs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,
@@ -118,22 +175,29 @@ CREATE TABLE IF NOT EXISTS public.blogs (
     link TEXT,
     image_url TEXT,
     created_at TIMESTAMPTZ DEFAULT now(),
-    created_by UUID REFERENCES public.users(id) NOT NULL
+    created_by UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL
 );
 
--- RLS for properties – owners only
-CREATE POLICY "owner can manage own properties"
-ON public.properties
-FOR ALL
-TO authenticated
-USING (auth.uid() = owner_id);
+-- Enable Row Level Security (RLS)
+ALTER TABLE public.blogs ENABLE ROW LEVEL SECURITY;
 
--- Admin full access (already covered by existing admin policies, but ensure)
-CREATE POLICY "admin full property access"
-ON public.properties
+-- Blogs – public read, admin write
+CREATE POLICY "public read blogs"
+ON public.blogs
+FOR SELECT
+USING (true);
+
+-- Admins can write blogs
+CREATE POLICY "admin write blogs"
+ON public.blogs
 FOR ALL
 TO authenticated
 USING (auth.role() = 'admin');
+
+
+-- =========================================================================
+-- 5. TRIGGER FUNCTIONS
+-- =========================================================================
 
 -- Enforce per‑user listing limit via trigger
 CREATE OR REPLACE FUNCTION enforce_listing_limit()
@@ -151,59 +215,3 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE TRIGGER trg_enforce_listing_limit
 BEFORE INSERT ON public.properties
 FOR EACH ROW EXECUTE FUNCTION enforce_listing_limit();
-
--- Blogs – public read, admin write
-CREATE POLICY "public read blogs"
-ON public.blogs
-FOR SELECT
-USING (true);
-
-CREATE POLICY "admin write blogs"
-ON public.blogs
-FOR ALL
-TO authenticated
-USING (auth.role() = 'admin');
-
--- =========================================================================
--- USERS TABLE
--- Stores application users and roles
--- =========================================================================
-CREATE TABLE IF NOT EXISTS public.users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    email TEXT NOT NULL UNIQUE,
-    role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('admin','user')),
-    created_at TIMESTAMPTZ DEFAULT now()
-);
-
--- Enable Row Level Security for users
-ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
-
--- Policies for users table
--- 1. Allow anyone to sign up (insert) with email
-CREATE POLICY "Allow public insert into users"
-ON public.users
-FOR INSERT
-TO anon, authenticated
-WITH CHECK (true);
-
--- 2. Allow admin to select all users
-CREATE POLICY "Allow admin select users"
-ON public.users
-FOR SELECT
-TO authenticated
-USING (auth.role() = 'admin');
-
--- 3. Allow admin to update any user
-CREATE POLICY "Allow admin update users"
-ON public.users
-FOR UPDATE
-TO authenticated
-USING (auth.role() = 'admin')
-WITH CHECK (true);
-
--- 4. Allow admin to delete any user
-CREATE POLICY "Allow admin delete users"
-ON public.users
-FOR DELETE
-TO authenticated
-USING (auth.role() = 'admin');

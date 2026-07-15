@@ -1,297 +1,569 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard | Landmark Realtors</title>
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body style="background: var(--bg-dark-base);">
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        :root { --sidebar-w: 220px; }
+        .admin-layout { display: flex; min-height: 100vh; padding-top: 0; }
+        .admin-sidebar {
+            width: var(--sidebar-w); background: var(--bg-dark-card);
+            border-right: 1px solid var(--border-glass); padding: 2rem 1rem;
+            display: flex; flex-direction: column; gap: 0.4rem;
+            position: fixed; top: 0; bottom: 0; left: 0; overflow-y: auto; z-index: 100;
+        }
+        .sidebar-logo { text-align: center; margin-bottom: 1.5rem; }
+        .sidebar-logo img { height: 40px; object-fit: contain; }
+        .sidebar-user {
+            font-size: 0.72rem; color: var(--color-gold-premium); text-align: center;
+            margin-bottom: 1rem; padding: 0.6rem; background: rgba(197,168,128,0.05);
+            border-radius: 4px; border: 1px solid var(--border-glass);
+        }
+        .sidebar-btn {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.75rem 1rem; border-radius: 4px; font-size: 0.82rem;
+            color: var(--text-secondary); border: none; background: transparent;
+            cursor: pointer; width: 100%; text-align: left; text-decoration: none;
+            transition: var(--transition-fast);
+        }
+        .sidebar-btn:hover, .sidebar-btn.active {
+            background: rgba(197,168,128,0.08); color: var(--color-gold-premium);
+        }
+        .sidebar-btn i { width: 16px; text-align: center; }
+        .sidebar-divider { height: 1px; background: var(--border-glass); margin: 0.8rem 0; }
+        .admin-main {
+            margin-left: var(--sidebar-w); flex: 1; padding: 2rem;
+            background: var(--bg-dark-base); min-height: 100vh;
+        }
+        .admin-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 2rem; padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-glass);
+        }
+        .admin-title { font-size: 1.6rem; font-weight: 300; color: var(--text-primary); }
+        .admin-title span { color: var(--color-gold-premium); }
+        .panel { background: var(--bg-dark-card); border: 1px solid var(--border-glass); border-radius: var(--card-radius); padding: 1.5rem; margin-bottom: 2rem; }
+        .panel-title { font-size: 1.25rem; font-weight: 500; color: var(--color-gold-premium); margin-bottom: 1.2rem; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.78rem; }
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--bg-dark-card); border: 1px solid var(--border-glass); border-radius: var(--card-radius); padding: 1.2rem; text-align: center; }
+        .stat-card .stat-num { font-size: 2.5rem; font-weight: 200; color: var(--color-gold-premium); font-family: var(--font-heading); }
+        .stat-card .stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.3rem; }
+        /* Table */
+        .admin-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .admin-table th { padding: 0.8rem 1rem; text-align: left; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-gold-muted); border-bottom: 1px solid var(--border-glass); }
+        .admin-table td { padding: 0.9rem 1rem; border-bottom: 1px solid rgba(197,168,128,0.06); color: var(--text-secondary); vertical-align: middle; }
+        .admin-table tr:hover td { background: rgba(197,168,128,0.03); }
+        .badge-type { padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .badge-type.buy { background: rgba(74,222,128,0.1); color: #4ade80; }
+        .badge-type.lease, .badge-type.rent { background: rgba(197,168,128,0.1); color: var(--color-gold-premium); }
+        .action-btns { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .action-btn { padding: 0.3rem 0.7rem; font-size: 0.72rem; border-radius: 3px; border: 1px solid var(--border-glass); background: transparent; color: var(--text-secondary); cursor: pointer; transition: var(--transition-fast); text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; }
+        .action-btn:hover { border-color: var(--color-gold-premium); color: var(--color-gold-premium); }
+        .action-btn.delete:hover { border-color: #f87171; color: #f87171; }
+        /* Form */
+        .prop-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .prop-form .full { grid-column: 1 / -1; }
+        .form-label { font-size: 0.72rem; color: var(--color-gold-premium); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 0.4rem; }
+        .form-input { width: 100%; padding: 0.7rem 0.9rem; background: rgba(13,17,32,0.5); border: 1px solid var(--border-glass); border-radius: 4px; color: var(--text-primary); font-size: 0.88rem; transition: var(--transition-fast); }
+        .form-input:focus { outline: none; border-color: var(--color-gold-premium); }
+        textarea.form-input { min-height: 100px; resize: vertical; }
+        select.form-input option { background: var(--bg-dark-card); }
+        /* Sections */
+        .section { display: none; }
+        .section.active { display: block; }
+        /* Flash messages */
+        .flash-msg { padding: 0.8rem 1.2rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: 0.88rem; display: flex; align-items: center; gap: 0.6rem; }
+        .flash-msg.success { background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+        .flash-msg.error { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+        /* Bypass badge */
+        .bypass-badge { background: rgba(251,191,36,0.1); color: #fbbf24; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 20px; border: 1px solid rgba(251,191,36,0.2); }
+        /* Inquiry items */
+        .inquiry-item { padding: 1rem; border: 1px solid var(--border-glass); border-radius: 4px; margin-bottom: 0.8rem; }
+        .inquiry-item:hover { border-color: var(--border-glass-hover); }
+        .inquiry-meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--text-muted); }
+        .inquiry-msg { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+        .inquiry-name { font-weight: 600; color: var(--color-gold-premium); font-size: 0.9rem; }
 
-    <!-- =========================================================================
-       LOGIN GATEWAY (Shown when not authenticated)
-       ========================================================================= -->
-    <div id="admin-auth-container" class="glass-panel auth-card">
-        <h2>Admin Portal</h2>
-        <p>Sign in to manage commercial listings and client inquiries.</p>
-        
-        <form id="admin-login-form">
-            <div class="form-group">
-                <label for="login-email">Email Address</label>
-                <input type="email" id="login-email" class="form-control" placeholder="admin@landmarkrealtors.in" required>
-            </div>
-            <div class="form-group">
-                <label for="login-password">Password</label>
-                <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="btn-gold" id="btn-login-submit" style="width: 100%; margin-top: 1rem;">Sign In</button>
-            
-            <div id="auth-form-status" style="margin-top: 1rem; text-align: center; font-size: 0.85rem; color: #f87171;"></div>
-        </form>
+        /* Mobile admin header and toggle styles */
+        .admin-mobile-header {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0; height: 60px;
+            background: rgba(7,9,14,0.92); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glass);
+            align-items: center; justify-content: space-between;
+            padding: 0 1.5rem; z-index: 1000;
+        }
+        .admin-mobile-toggle {
+            background: transparent; border: none; color: var(--color-gold-premium);
+            font-size: 1.25rem; cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center;
+        }
+        .admin-mobile-logo img {
+            height: 32px; object-fit: contain;
+        }
+        .admin-sidebar-overlay {
+            display: none;
+            position: fixed; inset: 0; top: 60px;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
+            z-index: 998;
+        }
+        .admin-sidebar-overlay.open {
+            display: block;
+        }
+        @media (max-width: 900px) {
+            .admin-mobile-header { display: flex; }
+            .admin-sidebar {
+                position: fixed; top: 60px; bottom: 0; left: -100%; width: 260px;
+                z-index: 999; transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                background: rgba(7, 9, 14, 0.98);
+                backdrop-filter: blur(20px);
+                padding: 1.5rem 1rem;
+            }
+            .admin-sidebar.open {
+                left: 0;
+            }
+            .admin-main {
+                margin-left: 0; padding: 6rem 1.5rem 2rem;
+            }
+            .admin-sidebar-overlay {
+                display: none;
+            }
+            .prop-form { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 480px) {
+            .stats-row { grid-template-columns: 1fr; }
+            .admin-table th:nth-child(3), .admin-table td:nth-child(3) { display: none; }
+            .admin-table th:nth-child(5), .admin-table td:nth-child(5) { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="admin-layout">
+
+    <!-- MOBILE HEADER -->
+    <div class="admin-mobile-header">
+        <button id="admin-menu-toggle" class="admin-mobile-toggle" aria-label="Toggle navigation">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="admin-mobile-logo">
+            <img src="/assets/images/logo-dark.png" alt="Landmark Realtors">
+        </div>
+        <div style="width: 32px;"></div>
     </div>
 
-    <!-- =========================================================================
-       MAIN ADMIN DASHBOARD LAYOUT (Hidden by default, shown after auth)
-       ========================================================================= -->
-    <a href="index.html" class="btn-outline" style="margin:1rem; display:inline-block;">← Back to Home</a>
-<div id="admin-dashboard-layout" class="admin-layout" style="display: none;">
-    <header class="admin-header">
-        <nav class="admin-top-nav">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#properties">Properties</a></li>
-                <li><a href="#inquiries">Inquiries</a></li>
-                <li><a href="#config">DB Config</a></li>
-            </ul>
-        </nav>
-    </header>
-        
-        <!-- Sidebar Navigation -->
-        <aside class="admin-sidebar">
-            <div class="admin-logo">
-                <a href="index.html">
-                    <img src="assets/images/logo-dark.png" alt="Landmark Realtors" class="logo-img" style="width: 140px; height: auto;">
-                </a>
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-logo">
+            <a href="/"><img src="/assets/images/logo-dark.png" alt="Landmark Realtors"></a>
+        </div>
+        <div class="sidebar-user">
+            <i class="fa-solid fa-user-circle"></i><br>
+            {{ session['user']['email'] }}
+            {% if session.get('bypass') %}
+            <span class="bypass-badge" style="display:block;margin-top:0.3rem;">Dev Bypass</span>
+            {% endif %}
+            <span style="display:block;margin-top:0.3rem;font-size:0.65rem;text-transform:uppercase;color:var(--text-muted);">{{ role }}</span>
+        </div>
+
+        <button class="sidebar-btn active" id="menu-overview" onclick="showSection('overview', this)">
+            <i class="fa-solid fa-chart-pie"></i> Overview
+        </button>
+        <button class="sidebar-btn" id="menu-properties" onclick="showSection('properties', this)">
+            <i class="fa-solid fa-building"></i> {% if role == 'admin' %}All Listings{% else %}My Listings{% endif %}
+        </button>
+        <button class="sidebar-btn" id="menu-add" onclick="showSection('add-property', this)">
+            <i class="fa-solid fa-plus-circle"></i> Add Listing
+        </button>
+        {% if role == 'admin' %}
+        <button class="sidebar-btn" id="menu-inquiries" onclick="showSection('inquiries', this)">
+            <i class="fa-solid fa-inbox"></i> Inquiries
+            {% if inquiries %}<span style="margin-left:auto;background:var(--color-gold-premium);color:#000;border-radius:20px;font-size:0.65rem;padding:0.1rem 0.5rem;">{{ inquiries|length }}</span>{% endif %}
+        </button>
+        {% endif %}
+
+        <div class="sidebar-divider"></div>
+        <a href="/" class="sidebar-btn"><i class="fa-solid fa-globe"></i> View Website</a>
+        <a href="/logout" class="sidebar-btn" style="color:#f87171;"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main">
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for cat, msg in messages %}
+            <div class="flash-msg {{ cat }}">
+                <i class="fa-solid {{ 'fa-circle-check' if cat == 'success' else 'fa-circle-xmark' }}"></i>
+                {{ msg }}
             </div>
-            
-            <ul class="admin-menu">
-                <li class="admin-menu-item active" id="menu-properties" data-tab="tab-properties-list">
-                    <i class="fa-solid fa-list-check"></i> Manage Properties
-                </li>
-                <li class="admin-menu-item" id="menu-add-property" data-tab="tab-property-form">
-                    <i class="fa-solid fa-plus"></i> Add New Property
-                </li>
-                <li class="admin-menu-item" id="menu-inquiries" data-tab="tab-inquiries-inbox">
-                    <i class="fa-solid fa-inbox"></i> Inquiries Inbox
-                </li>
-                <li class="admin-menu-item" id="menu-config" data-tab="tab-database-config">
-                    <i class="fa-solid fa-gears"></i> DB Configuration
-                </li>
-            </ul>
-            
-            <div style="margin-top: auto; padding-top: 2rem;">
-                <button class="btn-outline" id="btn-admin-logout" style="width: 100%; padding: 0.6rem 1rem; font-size: 0.8rem;">
-                    <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <!-- ─── OVERVIEW ──────────────────────────────────────── -->
+        <div id="section-overview" class="section active">
+            <div class="admin-header">
+                <div>
+                    <div class="admin-title">Welcome, <span>{% if role == 'admin' %}Admin{% else %}Partner{% endif %}</span></div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.3rem;">{% if role == 'admin' %}Landmark Realtors Dashboard{% else %}Partner Portal Dashboard{% endif %}</div>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-num">{{ properties|length }}</div>
+                    <div class="stat-label">{% if role == 'admin' %}Total Listings{% else %}My Listings{% endif %}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">{{ properties|selectattr('type','eq','buy')|list|length }}</div>
+                    <div class="stat-label">For Sale</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">{{ properties|selectattr('type','ne','buy')|list|length }}</div>
+                    <div class="stat-label">For Lease</div>
+                </div>
+                {% if role == 'admin' %}
+                <div class="stat-card">
+                    <div class="stat-num">{{ inquiries|length }}</div>
+                    <div class="stat-label">Inquiries</div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">{% if role == 'admin' %}Recent Listings{% else %}My Recent Listings{% endif %}</div>
+                {% if properties %}
+                <table class="admin-table">
+                    <thead><tr><th>Cover</th><th>Title</th><th>Location</th><th>Price</th><th>Type</th><th>Actions</th></tr></thead>
+                    <tbody>
+                    {% for prop in properties[:5] %}
+                    <tr>
+                        <td><img src="{{ prop.images[0] if prop.images else '' }}" width="60" height="45" style="object-fit:cover;border:1px solid var(--border-glass);" onerror="this.style.display='none'"></td>
+                        <td style="font-weight:500;color:var(--text-primary);">{{ prop.title }}</td>
+                        <td>{{ prop.location }}</td>
+                        <td style="color:var(--color-gold-premium);font-weight:600;">{{ prop.price_display }}</td>
+                        <td><span class="badge-type {{ prop.type }}">{{ prop.type }}</span></td>
+                        <td>
+                            <div class="action-btns">
+                                <a href="/property-details/{{ prop.id }}" class="action-btn" target="_blank"><i class="fa-solid fa-eye"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p style="color:var(--text-muted);text-align:center;padding:2rem;">No properties yet. <button class="action-btn" onclick="showSection('add-property', document.getElementById('menu-add'))">Add your first listing</button></p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- ─── PROPERTIES TABLE ──────────────────────────────── -->
+        <div id="section-properties" class="section">
+            <div class="admin-header">
+                <div class="admin-title">{% if role == 'admin' %}All <span>Listings</span>{% else %}My <span>Listings</span>{% endif %}</div>
+                <button class="btn-gold" onclick="showSection('add-property', document.getElementById('menu-add'))">
+                    <i class="fa-solid fa-plus"></i> Add New
                 </button>
             </div>
-        </aside>
+            <div class="panel" style="padding:0;overflow:hidden;">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>Cover</th><th>Title</th><th>Location</th><th>Price</th><th>Type</th><th>Category</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                    {% if properties %}
+                        {% for prop in properties %}
+                        <tr id="admin-row-{{ prop.id }}">
+                            <td><img src="{{ prop.images[0] if prop.images else '' }}" width="60" height="45" style="object-fit:cover;border:1px solid var(--border-glass);" onerror="this.style.display='none'"></td>
+                            <td style="font-weight:500;color:var(--text-primary);">{{ prop.title }}</td>
+                            <td>{{ prop.location }}</td>
+                            <td style="color:var(--color-gold-premium);font-weight:600;">{{ prop.price_display }}</td>
+                            <td><span class="badge-type {{ prop.type }}">{{ prop.type }}</span></td>
+                            <td style="text-transform:capitalize;font-size:0.8rem;">{{ prop.category }}</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="action-btn" onclick="editProperty({{ prop|tojson }})">
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    </button>
+                                    <form method="POST" action="/admin/property/delete/{{ prop.id }}" style="display:inline;"
+                                          onsubmit="return confirm('Delete this listing?')">
+                                        <button type="submit" class="action-btn delete">
+                                            <i class="fa-solid fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="7" style="text-align:center;padding:3rem;color:var(--text-muted);">No listings found. Add your first property above.</td></tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        <!-- Main Content Area -->
-        <main class="admin-content-area">
-            
-            <!-- SECTION 1: PROPERTIES LISTING TABLE -->
-            <section id="tab-properties-list" class="admin-tab-content">
-                <div class="admin-section-header">
-                    <h2>Manage Listings</h2>
-                    <button class="btn-gold" id="btn-add-new-shortcut"><i class="fa-solid fa-plus"></i> Add Property</button>
-                </div>
-                
-                <div class="glass-panel" style="padding: 2rem; margin-bottom: 2rem;">
-                    <div class="form-group" style="margin-bottom: 0; max-width: 400px;">
-                        <input type="text" id="admin-search-property" class="form-control" placeholder="Quick search listings by title or location...">
+        <!-- ─── ADD / EDIT PROPERTY FORM ─────────────────────── -->
+        <div id="section-add-property" class="section">
+            <div class="admin-header">
+                <div class="admin-title" id="form-section-title">Add <span>New Listing</span></div>
+            </div>
+            <div class="panel">
+                <form id="property-form" method="POST" action="/admin/property/save">
+                    <input type="hidden" name="property_id" id="form-property-id" value="">
+                    <div class="prop-form">
+                        <div class="full">
+                            <label class="form-label">Property Title *</label>
+                            <input type="text" name="title" id="form-title" class="form-input" placeholder="The Monarch Corporate Tower" required>
+                        </div>
+                        <div class="full">
+                            <label class="form-label">Description *</label>
+                            <textarea name="description" id="form-description" class="form-input" placeholder="Detailed description of the property…" required></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label">Location *</label>
+                            <input type="text" name="location" id="form-location" class="form-input" placeholder="Ferozepur Road, Ludhiana" required>
+                        </div>
+                        <div>
+                            <label class="form-label">Price (Numeric) *</label>
+                            <input type="number" name="price" id="form-price" class="form-input" placeholder="45000000" required>
+                        </div>
+                        <div>
+                            <label class="form-label">Price Display *</label>
+                            <input type="text" name="price_display" id="form-price-display" class="form-input" placeholder="₹4.5 Cr" required>
+                        </div>
+                        <div>
+                            <label class="form-label">Transaction Type *</label>
+                            <select name="type" id="form-type" class="form-input">
+                                <option value="buy">For Sale</option>
+                                <option value="lease">For Lease</option>
+                                <option value="rent">For Rent</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">Luxury Tier *</label>
+                            <select name="category" id="form-category" class="form-input">
+                                <option value="ultra-luxury">Ultra Luxury Portfolio</option>
+                                <option value="premium">Premium Collection</option>
+                                <option value="mid-luxury">Mid Luxury</option>
+                            </select>
+                        </div>
+                        <div class="full">
+                            <label class="form-label">Image URLs (one per line)</label>
+                            <textarea name="images_raw" id="form-images" class="form-input" style="min-height:80px;"
+                                placeholder="https://images.unsplash.com/photo-1486406146926…&#10;https://images.unsplash.com/photo-2…"></textarea>
+                            <div style="font-size:0.7rem;color:var(--text-muted);margin-top:0.3rem;">Enter one image URL per line</div>
+                        </div>
+                        <div class="full">
+                            <label class="form-label">Video URL (YouTube or Direct)</label>
+                            <input type="url" name="video_url" id="form-video" class="form-input" placeholder="https://www.youtube.com/watch?v=…">
+                        </div>
+                        <div class="full">
+                            <label class="form-label">Property Specs (Key: Value — one per line)</label>
+                            <textarea name="specs_raw" id="form-specs" class="form-input" style="min-height:80px;"
+                                placeholder="Carpet Area: 4,200 Sq.Ft&#10;Floor Config: B+G+5 Floors&#10;Parking: 6 Cars"></textarea>
+                            <div style="font-size:0.7rem;color:var(--text-muted);margin-top:0.3rem;">Format: Key: Value (one per line)</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+                        <button type="submit" class="btn-gold" id="btn-save-property">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Listing
+                        </button>
+                        <button type="button" class="btn-outline" onclick="resetPropertyForm()">
+                            <i class="fa-solid fa-rotate-left"></i> Reset Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ─── INQUIRIES INBOX ───────────────────────────────── -->
+        <div id="section-inquiries" class="section">
+            <div class="admin-header">
+                <div class="admin-title">Client <span>Inquiries</span></div>
+            </div>
+            {% if inquiries %}
+            {% for inq in inquiries %}
+            <div class="inquiry-item" id="inq-{{ inq.id }}">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;">
+                    <div class="inquiry-name">{{ inq.name }}</div>
+                    <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+                        <span style="font-size:0.7rem;color:var(--text-muted);">{{ inq.created_at }}</span>
+                        <span class="badge-type {{ inq.type }}" style="background:rgba(197,168,128,0.08);color:var(--color-gold-premium);">{{ inq.type }}</span>
+                        <form method="POST" action="/admin/inquiry/delete/{{ inq.id }}" style="display:inline;"
+                              onsubmit="return confirm('Delete this inquiry?')">
+                            <button type="submit" class="action-btn delete" style="padding:0.2rem 0.5rem;">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
-
-                <div class="glass-panel admin-table-container">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 80px;">Image</th>
-                                <th>Property Title</th>
-                                <th>Location</th>
-                                <th>Price</th>
-                                <th>Type</th>
-                                <th>Category</th>
-                                <th style="width: 150px; text-align: center;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-properties-table-body">
-                            <!-- Populated dynamically by JS -->
-                            <tr>
-                                <td colspan="7" style="text-align: center; padding: 3rem;">
-                                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--color-gold-premium); margin-bottom: 0.5rem; display: block;"></i>
-                                    Loading properties database...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="inquiry-meta">
+                    <span><i class="fa-solid fa-phone"></i> {{ inq.phone }}</span>
+                    {% if inq.email %}<span><i class="fa-solid fa-envelope"></i> {{ inq.email }}</span>{% endif %}
+                    {% if inq.property_id %}<span><i class="fa-solid fa-building"></i> Re: Property #{{ inq.property_id }}</span>{% endif %}
                 </div>
-            </section>
+                <div class="inquiry-msg">{{ inq.message }}</div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="panel" style="text-align:center;padding:3rem;">
+                <i class="fa-solid fa-inbox" style="font-size:3rem;color:var(--text-muted);opacity:0.3;"></i>
+                <p style="color:var(--text-muted);margin-top:1rem;">No inquiries yet. They'll appear here when clients reach out.</p>
+            </div>
+            {% endif %}
+        </div>
 
-            <!-- SECTION 2: ADD / EDIT PROPERTY FORM -->
-            <section id="tab-property-form" class="admin-tab-content" style="display: none;">
-                <div class="admin-section-header">
-                    <h2 id="form-section-title">Add Commercial Listing</h2>
-                    <button class="btn-outline" id="btn-cancel-form" style="padding: 0.6rem 1.2rem; font-size: 0.8rem;">Cancel</button>
-                </div>
-                
-                <div class="glass-panel luxury-form">
-                    <form id="property-crud-form">
-                        <!-- Hidden ID field for updates -->
-                        <input type="hidden" id="property-id-field">
+    </main>
+</div>
 
-                        <div class="form-group">
-                            <label for="prop-title">Listing Title</label>
-                            <input type="text" id="prop-title" class="form-control" placeholder="e.g., Luxury Corporate Showroom on Ferozepur Road" required>
-                        </div>
+<script>
+function showLoadingBar() {
+    let bar = document.getElementById('global-loading-bar');
+    if (!bar) {
+        bar = document.createElement('div');
+        bar.id = 'global-loading-bar';
+        bar.style.cssText = 'position:fixed;top:0;left:0;height:3px;background:linear-gradient(to right, #e8cc87, #c5a880);z-index:99999;width:0%;transition:width 0.4s ease, opacity 0.4s ease;opacity:0;';
+        document.body.appendChild(bar);
+        bar.offsetWidth;
+    }
+    bar.style.opacity = '1';
+    bar.style.width = '35%';
+    setTimeout(() => { bar.style.width = '65%'; }, 150);
+    setTimeout(() => { bar.style.width = '85%'; }, 500);
+    setTimeout(() => { bar.style.width = '95%'; }, 1200);
+}
+window.addEventListener('beforeunload', showLoadingBar);
+document.querySelectorAll('form').forEach(f => {
+    f.addEventListener('submit', showLoadingBar);
+});
 
-                        <div class="form-group">
-                            <label for="prop-desc">Listing Description</label>
-                            <textarea id="prop-desc" class="form-control" placeholder="Enter detailed description of facilities, key features, power supply, and nearby business anchors..." required></textarea>
-                        </div>
+function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    if (btn) btn.classList.add('active');
+}
 
-                        <div class="form-group-row">
-                            <div class="form-group">
-                                <label for="prop-location">Location Address (Ludhiana)</label>
-                                <input type="text" id="prop-location" class="form-control" placeholder="e.g., Ferozepur Road, Ludhiana" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="prop-price">Price Numerical (for sorting - numbers only)</label>
-                                <input type="number" id="prop-price" class="form-control" placeholder="e.g., 25000000" required>
-                            </div>
-                        </div>
+function editProperty(prop) {
+    document.getElementById('form-section-title').innerHTML = 'Edit <span>Listing</span>';
+    document.getElementById('form-property-id').value = prop.id || '';
+    document.getElementById('form-title').value = prop.title || '';
+    document.getElementById('form-description').value = prop.description || '';
+    document.getElementById('form-location').value = prop.location || '';
+    document.getElementById('form-price').value = prop.price || '';
+    document.getElementById('form-price-display').value = prop.price_display || '';
+    document.getElementById('form-type').value = prop.type || 'lease';
+    document.getElementById('form-category').value = prop.category || 'premium';
+    document.getElementById('form-video').value = prop.video_url || '';
+    // Images: join array with newlines
+    const imgs = prop.images || [];
+    document.getElementById('form-images').value = imgs.join('\n');
+    // Specs: convert object to Key: Value lines
+    const cf = prop.custom_fields || {};
+    document.getElementById('form-specs').value = Object.entries(cf).map(([k,v]) => k + ': ' + v).join('\n');
+    showSection('add-property', document.getElementById('menu-add'));
+    window.scrollTo(0,0);
+}
 
-                        <div class="form-group-row">
-                            <div class="form-group">
-                                <label for="prop-price-display">Price Display Text (e.g., Crore / Lakhs)</label>
-                                <input type="text" id="prop-price-display" class="form-control" placeholder="e.g., ₹2.5 Cr or ₹1.5 Lakh/month" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="prop-type">Transaction Type</label>
-                                <select id="prop-type" class="form-control" required>
-                                    <option value="buy">Sale / Purchase</option>
-                                    <option value="lease" selected>Leasing / Rental</option>
-                                </select>
-                            </div>
-                        </div>
+function resetPropertyForm() {
+    document.getElementById('form-section-title').innerHTML = 'Add <span>New Listing</span>';
+    document.getElementById('property-form').reset();
+    document.getElementById('form-property-id').value = '';
+}
 
-                        <div class="form-group-row">
-                            <div class="form-group">
-                                <label for="prop-category">Luxury Scale Category</label>
-                                <select id="prop-category" class="form-control" required>
-                                    <option value="mid-luxury">Mid-Luxury Space</option>
-                                    <option value="premium" selected>Premium Commercial Space</option>
-                                    <option value="ultra-luxury">Ultra Luxury Portfolio</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="prop-video">YouTube Video Link or Raw Video URL</label>
-                                <input type="url" id="prop-video" class="form-control" placeholder="e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-                            </div>
-                        </div>
-
-                        <!-- Multi-Image Carousel Builder -->
-                        <div class="form-group" style="border-top: 1px solid rgba(197,168,128,0.1); padding-top: 1.5rem;">
-                            <label style="font-size: 0.9rem; margin-bottom: 0.5rem;">Property Showcase Images (URLs - Add More for Carousel)</label>
-                            <p style="font-size: 0.8rem; margin-bottom: 1rem; color: var(--text-secondary);">Enter public URLs of images. Minimum 1 required.</p>
-                            <div id="image-urls-container">
-                                <div class="list-builder-item">
-                                    <input type="url" class="form-control prop-image-url" placeholder="https://images.unsplash.com/photo-..." required>
-                                    <button type="button" class="remove-field-btn" disabled><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </div>
-                            <button type="button" class="btn-outline" id="btn-add-image-url" style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.8rem;">
-                                <i class="fa-solid fa-plus"></i> Add Image URL
-                            </button>
-                        </div>
-
-                        <!-- Custom Specifications Fields Builder -->
-                        <div class="form-group" style="border-top: 1px solid rgba(197,168,128,0.1); padding-top: 1.5rem; margin-bottom: 2rem;">
-                            <label style="font-size: 0.9rem; margin-bottom: 0.5rem;">Custom Specifications &amp; Features</label>
-                            <p style="font-size: 0.8rem; margin-bottom: 1rem; color: var(--text-secondary);">Add dynamic specifications (e.g. Carpet Area: 3,500 Sq.Ft, Power Backup: 100% DG, Parking: 4 Slots).</p>
-                            <div id="custom-fields-container">
-                                <!-- Dynamic fields injected here -->
-                            </div>
-                            <button type="button" class="btn-outline" id="btn-add-custom-field" style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.8rem;">
-                                <i class="fa-solid fa-plus"></i> Add Custom Specification
-                            </button>
-                        </div>
-
-                        <button type="submit" class="btn-gold" id="btn-save-property" style="padding: 1rem 3rem;">Save Property Listing</button>
-                        <div id="form-submit-status" style="margin-top: 1rem; font-size: 0.9rem;"></div>
-                    </form>
-                </div>
-            </section>
-
-            <!-- SECTION 3: INQUIRIES & COLLABS INBOX -->
-            <section id="tab-inquiries-inbox" class="admin-tab-content" style="display: none;">
-                <div class="admin-section-header">
-                    <h2>Client Inquiries &amp; Collaborations</h2>
-                    <span id="inquiry-count-badge" class="property-badge" style="position: static;">0 Inbox</span>
-                </div>
-                
-                <div class="glass-panel admin-table-container">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Customer Name</th>
-                                <th>Contact Information</th>
-                                <th>Inquiry Type</th>
-                                <th>Requirements / Message</th>
-                                <th>Connected Property ID</th>
-                                <th>Submitted Date</th>
-                                <th style="width: 100px; text-align: center;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-inquiries-table-body">
-                            <!-- Populated dynamically by JS -->
-                            <tr>
-                                <td colspan="7" style="text-align: center; padding: 3rem;">
-                                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; color: var(--color-gold-premium); margin-bottom: 0.5rem; display: block;"></i>
-                                    Loading client inbox...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- SECTION 4: DATABASE CONFIG SETTINGS -->
-            <section id="tab-database-config" class="admin-tab-content" style="display: none;">
-                <div class="admin-section-header">
-                    <h2>Supabase Configuration</h2>
-                </div>
-                
-                <div class="glass-panel luxury-form" style="max-width: 650px;">
-                    <h3>Connect Your Database</h3>
-                    <p style="font-size: 0.85rem; margin-bottom: 1.5rem;">To connect this web app, input your Supabase project settings. These settings will be saved in your browser cache (localStorage) and will initialize your Supabase connection.</p>
-                    
-                    <form id="db-config-form">
-                        <div class="form-group">
-                            <label for="config-url">Supabase API URL</label>
-                            <input type="url" id="config-url" class="form-control" placeholder="https://yourprojectid.supabase.co" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="config-key">Supabase Anon Key</label>
-                            <input type="password" id="config-key" class="form-control" placeholder="ey... (long anon token)" required>
-                        </div>
-                        
-                        <div class="form-group-row" style="margin-top: 1.5rem;">
-                            <button type="submit" class="btn-gold" id="btn-save-config">Save Credentials</button>
-                            <button type="button" class="btn-outline" id="btn-clear-config">Reset / Disconnect</button>
-                        </div>
-                        <div id="config-form-status" style="margin-top: 1rem; font-size: 0.9rem;"></div>
-                    </form>
-                </div>
-            </section>
-
-        </main>
-    </div>
-
-    <!-- =========================================================================
-       JAVASCRIPT SOURCES
-       ========================================================================= -->
-    <!-- Supabase JS Client library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+// Parse images and specs from textarea before submit
+document.getElementById('property-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = this;
+    const fd = new FormData(form);
     
-    <!-- Custom Scripts -->
-    <script src="assets/js/supabase-config.js"></script>
-    <script src="assets/js/admin.js"></script>
+    // Parse images (one URL per line -> multiple `images` fields)
+    const rawImages = fd.get('images_raw') || '';
+    const images = rawImages.split('\n').map(s => s.trim()).filter(Boolean);
+    
+    // Parse specs (Key: Value per line -> spec_keys[] and spec_values[])
+    const rawSpecs = fd.get('specs_raw') || '';
+    const specKeys = [];
+    const specVals = [];
+    rawSpecs.split('\n').forEach(line => {
+        const colonIdx = line.indexOf(':');
+        if (colonIdx > 0) {
+            specKeys.push(line.slice(0, colonIdx).trim());
+            specVals.push(line.slice(colonIdx + 1).trim());
+        }
+    });
 
+    // Build a new form with correct field names for Flask
+    const newFd = new FormData();
+    for (const [k, v] of fd.entries()) {
+        if (k !== 'images_raw' && k !== 'specs_raw') newFd.append(k, v);
+    }
+    images.forEach(img => newFd.append('images', img));
+    specKeys.forEach(k => newFd.append('spec_keys', k));
+    specVals.forEach(v => newFd.append('spec_values', v));
+
+    // Submit via standard form POST
+    const target = form.getAttribute('action');
+    const submitForm = document.createElement('form');
+    submitForm.method = 'POST';
+    submitForm.action = target;
+    for (const [k, v] of newFd.entries()) {
+        const inp = document.createElement('input');
+        inp.type = 'hidden'; inp.name = k; inp.value = v;
+        submitForm.appendChild(inp);
+    }
+    document.body.appendChild(submitForm);
+    if (typeof showLoadingBar === 'function') showLoadingBar();
+    submitForm.submit();
+});
+
+// Mobile admin menu toggle
+const adminToggle = document.getElementById('admin-menu-toggle');
+const adminSidebar = document.querySelector('.admin-sidebar');
+const adminOverlay = document.createElement('div');
+adminOverlay.className = 'admin-sidebar-overlay';
+document.querySelector('.admin-layout').appendChild(adminOverlay);
+
+if (adminToggle) {
+    adminToggle.addEventListener('click', () => {
+        adminSidebar.classList.toggle('open');
+        adminOverlay.classList.toggle('open');
+        const icon = adminToggle.querySelector('i');
+        if (adminSidebar.classList.contains('open')) {
+            icon.className = 'fa-solid fa-xmark';
+        } else {
+            icon.className = 'fa-solid fa-bars';
+        }
+    });
+}
+
+adminOverlay.addEventListener('click', () => {
+    adminSidebar.classList.remove('open');
+    adminOverlay.classList.remove('open');
+    if (adminToggle) {
+        adminToggle.querySelector('i').className = 'fa-solid fa-bars';
+    }
+});
+
+// Close sidebar on menu click on mobile
+document.querySelectorAll('.sidebar-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (window.innerWidth <= 900) {
+            adminSidebar.classList.remove('open');
+            adminOverlay.classList.remove('open');
+            if (adminToggle) {
+                adminToggle.querySelector('i').className = 'fa-solid fa-bars';
+            }
+        }
+    });
+});
+</script>
 </body>
 </html>

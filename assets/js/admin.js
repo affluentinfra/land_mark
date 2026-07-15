@@ -7,6 +7,41 @@ let adminPropertiesList = [];
 let adminInquiriesList = [];
 let currentEditingPropertyId = null;
 
+const PLACEHOLDER_PROPERTIES = [
+    {
+        id: 'placeholder-1',
+        title: 'The Monarch Corporate Tower',
+        description: 'An architectural marvel standing tall on Ferozepur Road. Features double-height glass facades, VRF air conditioning, 100% power redundancy, high-speed elevators — designed for multinational HQs, banking institutions and premium legal firms.',
+        price: 45000000,
+        price_display: '₹4.5 Cr',
+        location: 'Ferozepur Road, Ludhiana',
+        type: 'buy',
+        category: 'ultra-luxury',
+        images: [
+            'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=900&auto=format&fit=crop'
+        ],
+        video_url: 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+        custom_fields: { 'Carpet Area': '4,200 Sq.Ft', 'Floor Config': 'B+G+5 Floors', 'Parking': '6 Dedicated Cars', 'Power Backup': '100% DG Set' },
+        created_at: '2026-07-10T12:00:00Z'
+    },
+    {
+        id: 'placeholder-2',
+        title: 'Aura Luxury Retail Arcade',
+        description: 'Located in the elite Sarabha Nagar shopping district. 32-foot frontage, double-height ceiling — ideal for luxury fashion labels, flagship jewellery boutiques or upscale cafes tapping Ludhiana\'s most affluent clientele.',
+        price: 150000,
+        price_display: '₹1.5 Lakh/month',
+        location: 'Sarabha Nagar, Ludhiana',
+        type: 'lease',
+        category: 'premium',
+        images: [
+            'https://images.unsplash.com/photo-1555529669-e69e7aa0db9a?q=80&w=900&auto=format&fit=crop'
+        ],
+        video_url: '',
+        custom_fields: { 'Super Area': '1,850 Sq.Ft', 'Frontage': '32 Feet', 'Ceiling': '14 Feet', 'Tenure': '9 Year Lease' },
+        created_at: '2026-07-08T10:30:00Z'
+    }
+];
+
 // =========================================================================
 // 1. AUTHENTICATION & INITIALIZATION GATE
 // =========================================================================
@@ -338,9 +373,9 @@ window.deletePropertyItem = async function(id) {
     if (row) row.style.opacity = "0.4";
 
     try {
-        if (id.startsWith('placeholder-')) {
+        if (id.startsWith('placeholder-') || sessionStorage.getItem('LANDMARK_ADMIN_BYPASS') === 'true') {
             // Local memory delete (Bypass)
-            alert("Placeholder property deleted locally. Setup Supabase to save changes permanently.");
+            alert("Property deleted locally.");
             adminPropertiesList = adminPropertiesList.filter(p => p.id !== id);
             renderPropertiesTable(adminPropertiesList);
         } else if (supabaseClient) {
@@ -526,7 +561,7 @@ async function handlePropertySubmit(e) {
     };
 
     try {
-        if (id.startsWith('placeholder-') || (!supabaseClient && sessionStorage.getItem('LANDMARK_ADMIN_BYPASS') === 'true')) {
+        if (id.startsWith('placeholder-') || sessionStorage.getItem('LANDMARK_ADMIN_BYPASS') === 'true') {
             // Local mockup insert/update (Bypass Mode)
             if (id) {
                 // Update
